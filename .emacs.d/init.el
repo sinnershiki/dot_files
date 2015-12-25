@@ -14,7 +14,6 @@
     (goto-char (point-max))
     (eval-print-last-sexp)))
 
-;; el-getでダウンロードしたパッケージは ~/.emacs.d/ に入るようにする
 (setq el-get-dir (locate-user-emacs-file "elisp"))
 
 ;;---------------------------------------------------
@@ -208,7 +207,6 @@
   (and (set (make-local-variable 'tab-width) 2)
        (set (make-local-variable 'coffee-tab-width) 2))
   )
-
 (add-hook 'coffee-mode-hook
   '(lambda() (coffee-custom)))
 
@@ -226,16 +224,3 @@
 ;; twittering mode
 (el-get-bundle twittering-mode)
 (setq twittering-use-master-password t)
-
-;; ess (R)
-;;(el-get-bundle ess)
-;;(el-get-bundle ess-R-data-view)
-;;(setq auto-mode-alist
-;;     (cons (cons "\\.r$" 'R-mode) auto-mode-alist))
-;;(autoload 'R-mode "ess-site" "Emacs Speaks Statistics mode" t)
-;;(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-;; )
