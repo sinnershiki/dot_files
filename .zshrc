@@ -122,12 +122,6 @@ alias -g L='| less'
 alias -g G='| grep'
 
 ########################################
-# 言語
-#rbenv
-export PATH=$HOME/.rbenv/bin:$PATH
-eval "$(rbenv init - zsh)"
-
-########################################
 #tmux
 autoload -Uz add-zsh-hook
 function rename_tmux_window() {
@@ -144,6 +138,8 @@ add-zsh-hook precmd rename_tmux_window
 case ${OSTYPE} in
     darwin*)
         #Mac用の設定
+        ########################################
+        # terminalに関する設定
         # プロンプト
         PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%}
 %~%# "
@@ -152,34 +148,46 @@ case ${OSTYPE} in
         export LSCOLORS=gxfxcxdxbxegedabagacad
         alias ls='ls -G -F'
 
-        # emacs
-        alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+        ########################################
+        # 言語
+        #rbenv
+        export PATH=$HOME/.rbenv/bin:$PATH
+        eval "$(rbenv init - zsh)"
 
-        #vscode
-        vscode () {
-            VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
-        }
+        # added by travis gem
+        [ -f /Users/sinner/.travis/travis.sh ] && source /Users/sinner/.travis/travis.sh
 
-        #tex
-        export PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
+        # pyenv
+        export PYENV_ROOT=/usr/local/var/pyenv
+        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
         # Go PATH
         export GOPATH=$HOME/go
         export PATH=$PATH:$GOPATH/bin
 
-        # MySQL Path Setting
-        export PATH=$PATH:/usr/local/mysql/bin
-
-        # virtualenvwrapperが使うpythonを指定
-        export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
-        export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv
-        # pipをグローバルにインストールした場合でも, virtualenv環境にパッケージをインストールする.
-        export PIP_RESPECT_VIRTUALENV=true
-        source "/usr/local/bin/virtualenvwrapper.sh"
-
-        #nodejs
+        #nodebrew
+        export PATH=$HOME/.nodebrew/current/bin:$PATH
         #export NODE_PATH=/usr/local/lib/node_modules
         #export PATH=$PATH:$NODE_PATH
+
+        #tex
+        export PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
+        ########################################
+        # Editor
+        # emacs
+        alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+
+        # vim
+        alias vim='/Applications/MacVim.app/Contents/MacOS/MacVim'
+
+        #vscode
+        vscode () {
+            VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
+        }
+        ########################################
+        # Etc
+        # MySQL Path Setting
+        export PATH=$PATH:/usr/local/mysql/bin
 
         ### Added by the Heroku Toolbelt
         export PATH="/usr/local/heroku/bin:$PATH"
@@ -188,6 +196,7 @@ case ${OSTYPE} in
         alias mosquitto_pub=/usr/local/bin/mosquitto_pub
         alias mosquitto_sub=/usr/local/bin/mosquitto_sub
         ;;
+    ########################################
     linux*)
         #Linux用の設定
         # プロンプト
