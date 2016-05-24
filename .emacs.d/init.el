@@ -14,6 +14,7 @@
     (goto-char (point-max))
     (eval-print-last-sexp)))
 
+;; el-getでダウンロードしたパッケージは ~/.emacs.d/ に入るようにする
 (setq el-get-dir (locate-user-emacs-file "elisp"))
 
 ;;---------------------------------------------------
@@ -169,7 +170,6 @@
 (el-get-bundle ruby-mode)
 (el-get-bundle ruby-block)
 (el-get-bundle ruby-electric)
-(el-get-bundle ruby-tools)
 (add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
@@ -177,7 +177,7 @@
 (setq ruby-deep-indent-paren-style nil)
 ;; マジックコメントの自動挿入を停止
 (setq ruby-insert-encoding-magic-comment nil)
-(add-hook 'enh-ruby-mode-hook '(lambda () (ruby-electric-mode t)))
+(add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
 (setq ruby-electric-expand-delimiters-list nil)
 ;; ruby-block.el --- highlight matching block
 (require 'ruby-block)
@@ -205,6 +205,16 @@
 (el-get-bundle yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
+;; js-mode
+(el-get-bundle js2-mode)
+(autoload 'js2-mode "js2" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(setq-default c-basic-offset 2)
+
+;; css-mode
+(el-get-bundle css-mode)
+(setq css-indent-level 2)
+
 ;; coffee-mode
 (el-get-bundle coffee-mode)
 (defun coffee-custom ()
@@ -222,6 +232,9 @@
             (make-local-variable 'js-indent-level)
             (setq js-indent-level 2)))
 
+;; python
+(el-get-bundle python-mode)
+
 ;; git
 (el-get-bundle git-gutter)
 (el-get-bundle magit)
@@ -230,8 +243,10 @@
 (el-get-bundle twittering-mode)
 (setq twittering-use-master-password t)
 
-;; dropbox
-(el-get-bundle dropbox)
+;; elixir mode
+(el-get-bundle pkg-info)
+(el-get-bundle elixir-lang/emacs-elixir)
+(require 'elixir-mode)
 
 ;; csv-mode
 (el-get-bundle csv-mode)
@@ -253,3 +268,5 @@
 
 ;; directory tree
 (el-get-bundle neotree)
+(require 'neotree)
+(global-set-key (kbd "C-c n") 'neotree-toggle)
