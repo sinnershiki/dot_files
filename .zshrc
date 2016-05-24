@@ -148,8 +148,17 @@ case ${OSTYPE} in
         export LSCOLORS=gxfxcxdxbxegedabagacad
         alias ls='ls -G -F'
 
+        #brew
+        alias brew="env PATH=${PATH/\/Users\/sinner\/\.pyenv\/shims:/} brew"
+
+        export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:${PATH}
+        export PATH="/usr/local/sbin:$PATH"
         ########################################
         # 言語
+        #anyenv
+        export PATH="$HOME/.anyenv/bin:$PATH"
+        eval "$(anyenv init -)"
+
         #rbenv
         export PATH=$HOME/.rbenv/bin:$PATH
         eval "$(rbenv init - zsh)"
@@ -158,8 +167,10 @@ case ${OSTYPE} in
         [ -f /Users/sinner/.travis/travis.sh ] && source /Users/sinner/.travis/travis.sh
 
         # pyenv
-        export PYENV_ROOT=/usr/local/var/pyenv
-        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+        export PYENV_ROOT="$HOME/.pyenv"
+        export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init -)"
+        eval "$(pyenv virtualenv-init -)"
 
         # Go PATH
         export GOPATH=$HOME/go
@@ -186,11 +197,18 @@ case ${OSTYPE} in
         }
         ########################################
         # Etc
+        # Git
+        export PATH=/usr/local/bin:$PATH
+        export PATH=$PATH:/usr/local/Cellar/git/2.7.4
+
+        # hub command
+        function git(){hub "$@"}
+
         # MySQL Path Setting
         export PATH=$PATH:/usr/local/mysql/bin
 
         ### Added by the Heroku Toolbelt
-        export PATH="/usr/local/heroku/bin:$PATH"
+        export PATH=/usr/local/heroku/bin:$PATH
 
         #mosquitto
         alias mosquitto_pub=/usr/local/bin/mosquitto_pub
@@ -200,7 +218,7 @@ case ${OSTYPE} in
     linux*)
         #Linux用の設定
         # プロンプト
-        PROMPT="%{${fg[red]}%}[%n@%m]%{${reset_color}%}
+        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}
 %~%# "
 
         #ls 色付け

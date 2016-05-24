@@ -166,9 +166,10 @@
 (yas-global-mode 1)
 
 ;; ruby-mode
-(el-get-bundle enh-ruby-mode)
+(el-get-bundle ruby-mode)
 (el-get-bundle ruby-block)
 (el-get-bundle ruby-electric)
+(el-get-bundle ruby-tools)
 (add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
@@ -182,6 +183,10 @@
 (require 'ruby-block)
 (ruby-block-mode t)
 (setq ruby-block-highlight-toggle t)
+
+;; rails関係
+(el-get-bundle rake)
+(el-get-bundle rails-el)
 
 ;; rhtml-mode
 (el-get-bundle rhtml-mode)
@@ -224,3 +229,27 @@
 ;; twittering mode
 (el-get-bundle twittering-mode)
 (setq twittering-use-master-password t)
+
+;; dropbox
+(el-get-bundle dropbox)
+
+;; csv-mode
+(el-get-bundle csv-mode)
+
+;; nginx-mode
+(el-get-bundle nginx-mode)
+
+;; ssh
+(el-get-bundle ssh)
+(el-get-bundle ssh-agency)
+(el-get-bundle ssh-config)
+
+;; tramp
+(el-get-bundle tramp)
+
+;; window
+(el-get-bundle windows)
+(el-get-bundle windsize)
+
+;; directory tree
+(el-get-bundle neotree)
