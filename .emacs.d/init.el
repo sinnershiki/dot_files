@@ -131,6 +131,9 @@
 ;;
 ;; el-getによるPackage管理
 ;;---------------------------------------------------
+
+;; 便利系
+;;---------------------------------------------------
 ;; anzu設定
 (el-get-bundle anzu)
 (global-anzu-mode +1)
@@ -166,6 +169,42 @@
 (el-get-bundle yasnippet)
 (yas-global-mode 1)
 
+;; git
+(el-get-bundle git-gutter)
+(el-get-bundle magit)
+
+;; twittering mode
+(el-get-bundle twittering-mode)
+(setq twittering-use-master-password t)
+
+;; ssh
+(el-get-bundle ssh)
+(el-get-bundle ssh-agency)
+(el-get-bundle ssh-config)
+
+;; tramp
+(el-get-bundle tramp)
+
+;; window
+(el-get-bundle windows)
+(el-get-bundle windsize)
+(require 'windsize)
+(windsize-default-keybindings)
+
+;; directory tree
+(el-get-bundle neotree)
+(require 'neotree)
+(global-set-key (kbd "C-c n") 'neotree-toggle)
+;; 隠しファイルをデフォルトで表示
+(setq neo-show-hidden-files t)
+(setq neo-smart-open t)
+
+;; editorconfig
+(el-get-bundle editorconfig)
+(editorconfig-mode 1)
+
+;; 言語系
+;;---------------------------------------------------
 ;; ruby-mode
 (el-get-bundle ruby-mode)
 (el-get-bundle ruby-block)
@@ -201,10 +240,6 @@
 (add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
 (add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
 
-;; yaml-mode
-(el-get-bundle yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-
 ;; js-mode
 (el-get-bundle js2-mode)
 (autoload 'js2-mode "js2" nil t)
@@ -225,28 +260,19 @@
 (add-hook 'coffee-mode-hook
   '(lambda() (coffee-custom)))
 
-;; json-mode
-(el-get-bundle json-mode)
-(add-hook 'json-mode-hook
-          (lambda ()
-            (make-local-variable 'js-indent-level)
-            (setq js-indent-level 2)))
-
 ;; python
 (el-get-bundle python-mode)
-
-;; git
-(el-get-bundle git-gutter)
-(el-get-bundle magit)
-
-;; twittering mode
-(el-get-bundle twittering-mode)
-(setq twittering-use-master-password t)
 
 ;; elixir mode
 (el-get-bundle pkg-info)
 (el-get-bundle elixir-lang/emacs-elixir)
 (require 'elixir-mode)
+
+;; ファイル系（csvや設定ファイル等）
+;;---------------------------------------------------
+;; yaml-mode
+(el-get-bundle yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; csv-mode
 (el-get-bundle csv-mode)
@@ -254,19 +280,9 @@
 ;; nginx-mode
 (el-get-bundle nginx-mode)
 
-;; ssh
-(el-get-bundle ssh)
-(el-get-bundle ssh-agency)
-(el-get-bundle ssh-config)
-
-;; tramp
-(el-get-bundle tramp)
-
-;; window
-(el-get-bundle windows)
-(el-get-bundle windsize)
-
-;; directory tree
-(el-get-bundle neotree)
-(require 'neotree)
-(global-set-key (kbd "C-c n") 'neotree-toggle)
+;; json-mode
+(el-get-bundle json-mode)
+(add-hook 'json-mode-hook
+          (lambda ()
+            (make-local-variable 'js-indent-level)
+            (setq js-indent-level 2)))
