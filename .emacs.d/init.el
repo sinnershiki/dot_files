@@ -191,12 +191,12 @@
 (require 'windsize)
 (windsize-default-keybindings)
 
-;; directory tree
+;; neotree
 (el-get-bundle neotree)
 (require 'neotree)
 (global-set-key (kbd "C-c n") 'neotree-toggle)
 ;; 隠しファイルをデフォルトで表示
-(setq neo-show-hidden-files t)
+(setq-default neo-show-hidden-files t)
 (setq neo-smart-open t)
 
 ;; editorconfig
@@ -267,6 +267,11 @@
 (el-get-bundle pkg-info)
 (el-get-bundle elixir-lang/emacs-elixir)
 (require 'elixir-mode)
+
+;; sh-mode
+(setq-default sh-indentation 2
+              sh-indent-for-case-label 0
+              sh-indent-for-case-alt '+)
 
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------
