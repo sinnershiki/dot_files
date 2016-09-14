@@ -117,6 +117,8 @@ alias mv='mv -i'
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
 
+alias g='git'
+
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G='| grep'
@@ -141,8 +143,8 @@ case ${OSTYPE} in
         ########################################
         # terminalに関する設定
         # プロンプト
-        PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%}
-%~%# "
+        PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%} %~
+%# "
 
         export CLICOLOR=1
         export LSCOLORS=gxfxcxdxbxegedabagacad
@@ -151,7 +153,7 @@ case ${OSTYPE} in
         #brew
         alias brew="env PATH=${PATH/\/Users\/sinner\/\.pyenv\/shims:/} brew"
 
-        export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:${PATH}
+        export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:$PATH
         export PATH="/usr/local/sbin:$PATH"
         ########################################
         # 言語
@@ -187,6 +189,7 @@ case ${OSTYPE} in
         # Editor
         # emacs
         alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+        alias e='emacs'
 
         # vim
         alias vim='/Applications/MacVim.app/Contents/MacOS/MacVim'
@@ -207,6 +210,9 @@ case ${OSTYPE} in
         # MySQL Path Setting
         export PATH=$PATH:/usr/local/mysql/bin
 
+        # postgres
+        export PGDATA=/usr/local/var/postgres
+
         ### Added by the Heroku Toolbelt
         export PATH=/usr/local/heroku/bin:$PATH
 
@@ -218,8 +224,8 @@ case ${OSTYPE} in
     linux*)
         #Linux用の設定
         # プロンプト
-        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}
-%~%# "
+        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%} %~
+%# "
 
         #ls 色付け
         alias ls='ls -F --color'
