@@ -14,7 +14,7 @@
     (goto-char (point-max))
     (eval-print-last-sexp)))
 
-;; el-getでダウンロードしたパッケージは ~/.emacs.d/ に入るようにする
+;; el-getでダウンロードしたパッケージは ~/.emacs.d/elisp に入るようにする
 (setq el-get-dir (locate-user-emacs-file "elisp"))
 
 ;;---------------------------------------------------
@@ -71,6 +71,12 @@
 
 ;; リージョン削除
 (delete-selection-mode t)
+
+;; オートセーブやバックアップファイルを~/.emacs.d/backupsに入れる
+(add-to-list 'backup-directory-alist
+             (cons "." "~/.emacs.d/backups/"))
+(setq auto-save-file-name-transforms
+      `((".*" ,(expand-file-name "~/.emacs.d/backups/") t)))
 
 ;;----------------------------------------------------
 ;;
@@ -137,6 +143,7 @@
 ;; anzu設定
 (el-get-bundle anzu)
 (global-anzu-mode +1)
+(global-set-key (kbd "C-x q") 'anzu-query-replace)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -194,7 +201,7 @@
 ;; neotree
 (el-get-bundle neotree)
 (require 'neotree)
-(global-set-key (kbd "C-c n") 'neotree-toggle)
+(global-set-key (kbd "C-x n") 'neotree-toggle)
 ;; 隠しファイルをデフォルトで表示
 (setq-default neo-show-hidden-files t)
 (setq neo-smart-open t)
@@ -202,6 +209,9 @@
 ;; editorconfig
 (el-get-bundle editorconfig)
 (editorconfig-mode 1)
+
+;; quickrun
+(el-get-bundle quickrun)
 
 ;; 言語系
 ;;---------------------------------------------------

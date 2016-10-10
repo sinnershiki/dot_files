@@ -224,8 +224,8 @@ case ${OSTYPE} in
     linux*)
         #Linux用の設定
         # プロンプト
-        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%} %~
-%# "
+        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}
+%~%# "
 
         #ls 色付け
         alias ls='ls -F --color'

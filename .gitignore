@@ -1,6 +1,6 @@
 *~
 *\#
 .DS_Store
-el-get
-elisp
-elpa
+/.emacs.d/*
+!/.emacs.d/init.el
+!/.emacs.d/conf
