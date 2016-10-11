@@ -191,6 +191,8 @@
 
 ;; tramp
 (el-get-bundle tramp)
+(add-to-list 'backup-directory-alist
+             (cons tramp-file-name-regexp nil))
 
 ;; window
 (el-get-bundle windows)
