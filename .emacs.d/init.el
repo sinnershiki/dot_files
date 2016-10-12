@@ -186,6 +186,7 @@
 (el-get-bundle git-gutter)
 (el-get-bundle git-gutter-fringe)
 (el-get-bundle magit)
+(global-set-key (kbd "C-c m") 'magit-status)
 
 ;; twittering mode
 (el-get-bundle twittering-mode)
@@ -260,6 +261,7 @@
 
 ;; smooth-scroll
 (el-get-bundle smooth-scroll)
+(smooth-scroll-mode t)
 
 ;; smartparens
 (el-get-bundle smartparens)
