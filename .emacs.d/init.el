@@ -183,26 +183,8 @@
 (global-set-key (kbd "C-c C-p") 'flycheck-previous-error)
 
 ;; git
-(el-get-bundle git-gutter+)
-(global-git-gutter+-mode)
-(global-set-key (kbd "C-x g") 'git-gutter+-mode) ; Turn on/off in the current buffer
-(global-set-key (kbd "C-x G") 'global-git-gutter+-mode) ; Turn on/off globally
-(eval-after-load 'git-gutter+
-  '(progn
-     ;;; Jump between hunks
-     (define-key git-gutter+-mode-map (kbd "C-x n") 'git-gutter+-next-hunk)
-     (define-key git-gutter+-mode-map (kbd "C-x p") 'git-gutter+-previous-hunk)
-
-     ;;; Act on hunks
-     (define-key git-gutter+-mode-map (kbd "C-x v =") 'git-gutter+-show-hunk)
-     (define-key git-gutter+-mode-map (kbd "C-x r") 'git-gutter+-revert-hunks)
-     ;; Stage hunk at point.
-     ;; If region is active, stage all hunk lines within the region.
-     (define-key git-gutter+-mode-map (kbd "C-x t") 'git-gutter+-stage-hunks)
-     (define-key git-gutter+-mode-map (kbd "C-x c") 'git-gutter+-commit)
-     (define-key git-gutter+-mode-map (kbd "C-x C") 'git-gutter+-stage-and-commit)
-     (define-key git-gutter+-mode-map (kbd "C-x C-y") 'git-gutter+-stage-and-commit-whole-buffer)
-     (define-key git-gutter+-mode-map (kbd "C-x U") 'git-gutter+-unstage-whole-buffer)))
+(el-get-bundle git-gutter)
+(el-get-bundle git-gutter-fringe)
 (el-get-bundle magit)
 
 ;; twittering mode
@@ -242,8 +224,8 @@
 (global-undo-tree-mode t)
 (global-set-key (kbd "M-/") 'undo-tree-redo)
 ;; undohist
-(el-get-bundle undohist)
-(undohist-initialize)
+(el-get-bundle m2ym/undohist-el)
+
 ;; volatile-highlights
 (el-get-bundle volatile-highlights)
 (volatile-highlights-mode t)
@@ -261,6 +243,23 @@
 ;; powerline
 (el-get-bundle powerline)
 (powerline-default-theme)
+(set-face-attribute 'mode-line nil
+                    :foreground "#fff"
+                    :background "#0000ff"
+                    :box nil)
+
+(set-face-attribute 'powerline-active1 nil
+                    :foreground "#fff"
+                    :background "#7777ff"
+                    :inherit 'mode-line)
+
+(set-face-attribute 'powerline-active2 nil
+                    :foreground "#000"
+                    :background "#aaaaff"
+                    :inherit 'mode-line)
+
+;; smooth-scroll
+(el-get-bundle smooth-scroll)
 
 ;; smartparens
 (el-get-bundle smartparens)
@@ -270,8 +269,6 @@
 ;;---------------------------------------------------
 ;; ruby-mode
 (el-get-bundle ruby-mode)
-(el-get-bundle ruby-block)
-(el-get-bundle ruby-electric)
 (add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
@@ -279,10 +276,12 @@
 (setq ruby-deep-indent-paren-style nil)
 ;; マジックコメントの自動挿入を停止
 (setq ruby-insert-encoding-magic-comment nil)
+(el-get-bundle ruby-electric)
 (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
 (setq ruby-electric-expand-delimiters-list nil)
 ;; ruby-block.el --- highlight matching block
-(ruby-block-mode t)
+(el-get-bundle ruby-block)
+(add-hook 'ruby-mode-hook '(lambda () (ruby-block-mode t)))
 (setq ruby-block-highlight-toggle t)
 
 ;; rails関係
