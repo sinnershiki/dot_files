@@ -172,22 +172,42 @@
 (el-get-bundle auto-complete)
 (ac-config-default)
 
-;;yasnippet設定
+;; yasnippet設定
 (el-get-bundle yasnippet)
 (yas-global-mode 1)
 
+;; flycheck
+(el-get-bundle flycheck)
+(global-flycheck-mode)
+(global-set-key (kbd "C-c C-n") 'flycheck-next-error)
+(global-set-key (kbd "C-c C-p") 'flycheck-previous-error)
+
 ;; git
-(el-get-bundle git-gutter)
+(el-get-bundle git-gutter+)
+(global-git-gutter+-mode)
+(global-set-key (kbd "C-x g") 'git-gutter+-mode) ; Turn on/off in the current buffer
+(global-set-key (kbd "C-x G") 'global-git-gutter+-mode) ; Turn on/off globally
+(eval-after-load 'git-gutter+
+  '(progn
+     ;;; Jump between hunks
+     (define-key git-gutter+-mode-map (kbd "C-x n") 'git-gutter+-next-hunk)
+     (define-key git-gutter+-mode-map (kbd "C-x p") 'git-gutter+-previous-hunk)
+
+     ;;; Act on hunks
+     (define-key git-gutter+-mode-map (kbd "C-x v =") 'git-gutter+-show-hunk)
+     (define-key git-gutter+-mode-map (kbd "C-x r") 'git-gutter+-revert-hunks)
+     ;; Stage hunk at point.
+     ;; If region is active, stage all hunk lines within the region.
+     (define-key git-gutter+-mode-map (kbd "C-x t") 'git-gutter+-stage-hunks)
+     (define-key git-gutter+-mode-map (kbd "C-x c") 'git-gutter+-commit)
+     (define-key git-gutter+-mode-map (kbd "C-x C") 'git-gutter+-stage-and-commit)
+     (define-key git-gutter+-mode-map (kbd "C-x C-y") 'git-gutter+-stage-and-commit-whole-buffer)
+     (define-key git-gutter+-mode-map (kbd "C-x U") 'git-gutter+-unstage-whole-buffer)))
 (el-get-bundle magit)
 
 ;; twittering mode
 (el-get-bundle twittering-mode)
 (setq twittering-use-master-password t)
-
-;; ssh
-(el-get-bundle ssh)
-(el-get-bundle ssh-agency)
-(el-get-bundle ssh-config)
 
 ;; tramp
 (el-get-bundle tramp)
@@ -195,14 +215,12 @@
              (cons tramp-file-name-regexp nil))
 
 ;; window
-(el-get-bundle windows)
+;; Then use C-S-<left>, C-S-<right>, C-S-<up>, and C-S-<down> to move window edges.
 (el-get-bundle windsize)
-(require 'windsize)
 (windsize-default-keybindings)
 
 ;; neotree
 (el-get-bundle neotree)
-(require 'neotree)
 (global-set-key (kbd "C-x n") 'neotree-toggle)
 ;; 隠しファイルをデフォルトで表示
 (setq-default neo-show-hidden-files t)
@@ -214,6 +232,39 @@
 
 ;; quickrun
 (el-get-bundle quickrun)
+(global-set-key (kbd "<f5>") 'quickrun)
+(global-set-key (kbd "C-<f5>") 'quickrun-with-arg)
+(global-set-key (kbd "M-<f5>") 'quickrun-compile-only)
+
+;; undoまわり
+;; undo tree
+(el-get-bundle undo-tree)
+(global-undo-tree-mode t)
+(global-set-key (kbd "M-/") 'undo-tree-redo)
+;; undohist
+(el-get-bundle undohist)
+(undohist-initialize)
+;; volatile-highlights
+(el-get-bundle volatile-highlights)
+(volatile-highlights-mode t)
+(vhl/define-extension 'undo-tree 'undo-tree-yank 'undo-tree-move)
+(vhl/install-extension 'undo-tree)
+
+;; projectile
+;; Enable projectile-mode, open a file in one of your projects and type a command such as C-c p f.
+(el-get-bundle projectile)
+
+;; hlinum linum-modeのハイライト
+(el-get-bundle tom-tan/hlinum-mode)
+(hlinum-activate)
+
+;; powerline
+(el-get-bundle powerline)
+(powerline-default-theme)
+
+;; smartparens
+(el-get-bundle smartparens)
+(smartparens-global-mode t)
 
 ;; 言語系
 ;;---------------------------------------------------
@@ -231,7 +282,6 @@
 (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
 (setq ruby-electric-expand-delimiters-list nil)
 ;; ruby-block.el --- highlight matching block
-(require 'ruby-block)
 (ruby-block-mode t)
 (setq ruby-block-highlight-toggle t)
 
@@ -278,12 +328,14 @@
 ;; elixir mode
 (el-get-bundle pkg-info)
 (el-get-bundle elixir-lang/emacs-elixir)
-(require 'elixir-mode)
 
 ;; sh-mode
 (setq-default sh-indentation 2
               sh-indent-for-case-label 0
               sh-indent-for-case-alt '+)
+
+;; markdown-mode
+(el-get-bundle markdown-mode)
 
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------
