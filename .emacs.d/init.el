@@ -172,9 +172,19 @@
 (el-get-bundle auto-complete)
 (ac-config-default)
 
-;; yasnippet設定
+;; yasnippet
 (el-get-bundle yasnippet)
 (yas-global-mode 1)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/mysnippets"
+        "~/.emacs.d/snippets"
+        ))
+;; 既存スニペットを挿入する
+(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
+;; 新規スニペットを作成するバッファを用意する
+(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
+;; 既存スニペットを閲覧・編集する
+(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
 
 ;; flycheck
 (el-get-bundle flycheck)
@@ -225,7 +235,9 @@
 (global-undo-tree-mode t)
 (global-set-key (kbd "M-/") 'undo-tree-redo)
 ;; undohist
-(el-get-bundle m2ym/undohist-el)
+(el-get-bundle undohist)
+(require 'undohist)
+(undohist-initialize)
 
 ;; volatile-highlights
 (el-get-bundle volatile-highlights)
@@ -283,8 +295,12 @@
 (setq ruby-electric-expand-delimiters-list nil)
 ;; ruby-block.el --- highlight matching block
 (el-get-bundle ruby-block)
+(require 'ruby-block)
 (add-hook 'ruby-mode-hook '(lambda () (ruby-block-mode t)))
 (setq ruby-block-highlight-toggle t)
+;; inf-ruby
+(el-get-bundle inf-ruby)
+(add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
 
 ;; rails関係
 (el-get-bundle rake)
