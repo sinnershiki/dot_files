@@ -233,5 +233,9 @@ case ${OSTYPE} in
 
         #ls 色付け
         alias ls='ls -F --color'
+
+        ########################################
+        # zsh拡張plugin
+        source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
         ;;
 esac
