@@ -28,6 +28,26 @@
 ;;
 ;; Emacs全般の設定
 ;;---------------------------------------------------
+;; system-type predicates
+(defun x->bool (elt) (not (not elt)))
+(setq darwin-p  (eq system-type 'darwin)
+      ns-p      (eq window-system 'ns)
+      carbon-p  (eq window-system 'mac)
+      linux-p   (eq system-type 'gnu/linux)
+      colinux-p (when linux-p
+                  (let ((file "/proc/modules"))
+                    (and
+                     (file-readable-p file)
+                     (x->bool
+                      (with-temp-buffer
+                        (insert-file-contents file)
+                        (goto-char (point-min))
+                        (re-search-forward "^cofuse\.+" nil t))))))
+      cygwin-p  (eq system-type 'cygwin)
+      nt-p      (eq system-type 'windows-nt)
+      meadow-p  (featurep 'meadow)
+      windows-p (or cygwin-p nt-p meadow-p))
+
 ;; 起動時に出てくるメッセージを消す
 (setq inhibit-startup-message t)
 
@@ -98,10 +118,18 @@
          (alpha . (80 55 nil nil)))
        default-frame-alist))
 
+
 ;; フォントを指定
-(set-face-attribute 'default nil
-                    :family "Ricty"
-                    :height 180)
+;; linux
+(when linux-p
+  (set-face-attribute 'default nil
+                      :family "Ricty"
+                      :height 130))
+;; mac
+(when darwin-p
+  (set-face-attribute 'default nil
+                      :family "Ricty"
+                      :height 180))
 
 ;;---------------------------------------------------
 ;;
@@ -378,8 +406,8 @@
 (setq-default c-basic-offset 2)
 
 ;; css-mode
-(el-get-bundle css-mode)
-(setq css-indent-level 2)
+;;(el-get-bundle css-mode)
+;;(setq css-indent-level 2)
 
 ;; coffee-mode
 (el-get-bundle coffee-mode)
