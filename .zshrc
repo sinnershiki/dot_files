@@ -219,13 +219,17 @@ case ${OSTYPE} in
         #mosquitto
         alias mosquitto_pub=/usr/local/bin/mosquitto_pub
         alias mosquitto_sub=/usr/local/bin/mosquitto_sub
+
+        ########################################
+        # zsh拡張plugin
+        source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
         ;;
     ########################################
     linux*)
         #Linux用の設定
         # プロンプト
-        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}
-%~%# "
+        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}%~
+%# "
 
         #ls 色付け
         alias ls='ls -F --color'
