@@ -175,11 +175,6 @@
 
 ;; 便利系
 ;;---------------------------------------------------
-;; popwin
-(el-get-bundle popwin)
-(setq display-buffer-function 'popwin:display-buffer)
-(setq popwin:popup-window-position 'bottom)
-
 ;; google transelate
 (el-get-bundle google-translate)
 (require 'google-translate-default-ui)
@@ -211,8 +206,6 @@
      (if asciip "ja" "en")
      string)))
 (global-set-key (kbd "C-c t") 'google-translate-enja-or-jaen)
-;; google-translate.elの翻訳バッファをポップアップで表示させる
-(push '("*Google Translate*") popwin:special-display-config)
 
 ;; anzu設定
 (el-get-bundle anzu)
@@ -299,7 +292,6 @@
 
 ;; quickrun
 (el-get-bundle quickrun)
-(push '("*quickrun*") popwin:special-display-config)
 (global-set-key (kbd "<f5>") 'quickrun)
 (global-set-key (kbd "C-<f5>") 'quickrun-with-arg)
 (global-set-key (kbd "M-<f5>") 'quickrun-compile-only)
@@ -358,6 +350,14 @@
 (el-get-bundle org-tree-slide)
 (setq org-tree-slide-heading-emphasis t)
 (define-key global-map (kbd "<f4>") 'org-tree-slide-mode)
+
+;; popwin
+(el-get-bundle popwin)
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+(setq popwin:popup-window-position 'bottom)
+(push '("*quickrun*") popwin:special-display-config)
+(push '("*Google Translate*") popwin:special-display-config)
 
 ;; 言語系
 ;;---------------------------------------------------
