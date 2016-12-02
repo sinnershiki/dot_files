@@ -175,6 +175,17 @@
 
 ;; 便利系
 ;;---------------------------------------------------
+;; sequential-command
+(el-get-bundle sequential-command)
+(global-set-key "\C-a" 'seq-home)
+(global-set-key "\C-e" 'seq-end)
+(when (require 'org nil t)
+  (define-key org-mode-map "\C-a" 'org-seq-home)
+  (define-key org-mode-map "\C-e" 'org-seq-end))
+(define-key esc-map "u" 'seq-upcase-backward-word)
+(define-key esc-map "c" 'seq-capitalize-backward-word)
+(define-key esc-map "l" 'seq-downcase-backward-word)
+
 ;; google transelate
 (el-get-bundle google-translate)
 (require 'google-translate-default-ui)
@@ -221,7 +232,7 @@
  '(anzu-search-threshold 1000)
  '(package-selected-packages
    (quote
-    (nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
+    (sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
  '(safe-local-variable-values
    (quote
     ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
