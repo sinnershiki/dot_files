@@ -219,6 +219,9 @@
  '(anzu-deactivate-region t)
  '(anzu-mode-lighter "")
  '(anzu-search-threshold 1000)
+ '(package-selected-packages
+   (quote
+    (nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
  '(safe-local-variable-values
    (quote
     ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
@@ -358,6 +361,7 @@
 (setq popwin:popup-window-position 'bottom)
 (push '("*quickrun*") popwin:special-display-config)
 (push '("*Google Translate*") popwin:special-display-config)
+;;(push '("*YaTeX-typesetting*") popwin:special-display-config)
 
 ;; 言語系
 ;;---------------------------------------------------
@@ -434,6 +438,17 @@
 ;; markdown-mode
 (el-get-bundle markdown-mode)
 
+;; yatex-mode
+;; run yatex mode when open .tex file
+(el-get-bundle yatex)
+(setq auto-mode-alist
+      (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
+(autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
+(setq tex-command "platex")
+(setq dviprint-command-format "dvipdfmx %s")
+;; use utf-8 on yatex mode
+(setq YaTeX-kanji-code 4)
+
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------
 ;; yaml-mode
@@ -452,3 +467,9 @@
           (lambda ()
             (make-local-variable 'js-indent-level)
             (setq js-indent-level 2)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
