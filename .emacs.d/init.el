@@ -177,6 +177,7 @@
 ;;---------------------------------------------------
 ;; sequential-command
 (el-get-bundle sequential-command)
+(require 'sequential-command)
 (global-set-key "\C-a" 'seq-home)
 (global-set-key "\C-e" 'seq-end)
 (when (require 'org nil t)
