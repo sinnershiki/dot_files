@@ -190,7 +190,7 @@
 
 ;; google transelate
 (el-get-bundle google-translate)
-(require 'google-translate-default-ui)
+(require 'google-translate)
 (defvar google-translate-english-chars "[:ascii:]’“”–"
   "これらの文字が含まれているときは英語とみなす")
 (defun google-translate-enja-or-jaen (&optional string)
@@ -234,7 +234,7 @@
  '(anzu-search-threshold 1000)
  '(package-selected-packages
    (quote
-    (sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
+    (latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
  '(safe-local-variable-values
    (quote
     ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
@@ -374,6 +374,8 @@
 (setq popwin:popup-window-position 'bottom)
 (push '("*quickrun*") popwin:special-display-config)
 (push '("*Google Translate*") popwin:special-display-config)
+(push '("*latex-math-preview-expression*") popwin:special-display-config)
+;;(push '("*math-mode-signs*") popwin:special-display-config)
 ;;(push '("*YaTeX-typesetting*") popwin:special-display-config)
 
 ;; 言語系
@@ -459,9 +461,24 @@
 (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
 (setq YaTeX-prefix "\C-t")
 (setq tex-command "platex")
+(setq bibtex-command "pbibtex")
 (setq dviprint-command-format "dvipdfmx %s")
 ;; use utf-8 on yatex mode
 (setq YaTeX-kanji-code 4)
+;;%#BIBTEX jbibtex paper
+;; reftex-mode
+(add-hook 'yatex-mode-hook 'turn-on-reftex)
+
+;; latex-math-preview
+(el-get-bundle latex-math-preview)
+(add-hook 'yatex-mode-hook
+          '(lambda ()
+             (YaTeX-define-key "p" 'latex-math-preview-expression)
+             (YaTeX-define-key "\C-p" 'latex-math-preview-save-image-file)
+             (YaTeX-define-key "j" 'latex-math-preview-insert-symbol)
+             (YaTeX-define-key "\C-j" 'latex-math-preview-last-symbol-again)
+             (YaTeX-define-key "\C-b" 'latex-math-preview-beamer-frame)))
+(setq latex-math-preview-in-math-mode-p-func 'YaTeX-in-math-mode-p)
 
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------
