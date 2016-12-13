@@ -136,6 +136,12 @@ function rename_tmux_window() {
 add-zsh-hook precmd rename_tmux_window
 
 ########################################
+# zsh拡張plugin
+if [ -e ~/.zsh/zsh-autosuggestions ]; then
+  source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+########################################
 # OS 別の設定
 case ${OSTYPE} in
     darwin*)
@@ -220,22 +226,16 @@ case ${OSTYPE} in
         alias mosquitto_pub=/usr/local/bin/mosquitto_pub
         alias mosquitto_sub=/usr/local/bin/mosquitto_sub
 
-        ########################################
-        # zsh拡張plugin
-        source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
         ;;
     ########################################
     linux*)
         #Linux用の設定
         # プロンプト
-        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}%~
+        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%} %~
 %# "
 
         #ls 色付け
         alias ls='ls -F --color'
 
-        ########################################
-        # zsh拡張plugin
-        source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
         ;;
 esac
