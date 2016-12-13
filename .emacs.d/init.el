@@ -362,6 +362,25 @@
 (el-get-bundle smartparens)
 (smartparens-global-mode t)
 
+;; expand-region
+(el-get-bundle expand-region)
+(global-set-key (kbd "C-,") 'er/expand-region)
+
+;; rainbow-delimiters を使うための設定
+(el-get-bundle rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+;; 括弧の色を強調する設定
+(require 'cl-lib)
+(require 'color)
+(defun rainbow-delimiters-using-stronger-colors ()
+  (interactive)
+  (cl-loop
+   for index from 1 to rainbow-delimiters-max-face-count
+   do
+   (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
+    (cl-callf color-saturate-name (face-foreground face) 30))))
+(add-hook 'emacs-startup-hook 'rainbow-delimiters-using-stronger-colors)
+
 ;; org-tree-slide
 (el-get-bundle org-tree-slide)
 (setq org-tree-slide-heading-emphasis t)
