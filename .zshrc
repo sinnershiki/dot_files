@@ -137,8 +137,30 @@ add-zsh-hook precmd rename_tmux_window
 
 ########################################
 # zsh拡張plugin
+# autosuggestions
 if [ -e ~/.zsh/zsh-autosuggestions ]; then
   source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# autojump
+if [ -e ~/.autojump ]; then
+  [[ -s /home/sugano/.autojump/etc/profile.d/autojump.sh ]] && source /home/sugano/.autojump/etc/profile.d/autojump.sh
+  autoload -U compinit && compinit -u
+fi
+
+########################################
+# ruby
+# rbenv
+if [ -e ~/.rbenv ]; then
+  export PATH=$HOME/.rbenv/bin:$PATH
+  eval "$(rbenv init - zsh)"
+fi
+
+########################################
+# golang
+if type go >/dev/null 2>&1; then
+  export GOPATH=$HOME/go
+  export PATH=$PATH:$GOPATH/bin
 fi
 
 ########################################
@@ -167,10 +189,6 @@ case ${OSTYPE} in
         export PATH="$HOME/.anyenv/bin:$PATH"
         eval "$(anyenv init -)"
 
-        #rbenv
-        export PATH=$HOME/.rbenv/bin:$PATH
-        eval "$(rbenv init - zsh)"
-
         # added by travis gem
         [ -f /Users/sinner/.travis/travis.sh ] && source /Users/sinner/.travis/travis.sh
 
@@ -179,10 +197,6 @@ case ${OSTYPE} in
         export PATH="$PYENV_ROOT/bin:$PATH"
         eval "$(pyenv init -)"
         eval "$(pyenv virtualenv-init -)"
-
-        # Go PATH
-        export GOPATH=$HOME/go
-        export PATH=$PATH:$GOPATH/bin
 
         #nodebrew
         export PATH=$HOME/.nodebrew/current/bin:$PATH
