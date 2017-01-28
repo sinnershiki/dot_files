@@ -10,8 +10,12 @@ colors
 bindkey -e
 
 # ヒストリの設定
-HISTFILE=~/.zsh_history
-HISTSIZE=1000000
+HISTFILE=${HOME}/.zsh_history
+
+# メモリに保存される履歴の件数
+HISTSIZE=100000
+
+# 履歴ファイルに保存される履歴の件数
 SAVEHIST=1000000
 
 # 単語の区切り文字を指定する
@@ -73,14 +77,14 @@ setopt auto_cd
 # cd したら自動的にpushdする
 setopt auto_pushd
 
-# 重複したディレクトリを追加しない
-setopt pushd_ignore_dups
-
 # = の後はパス名として補完する
 setopt magic_equal_subst
 
 # 同時に起動したzshの間でヒストリを共有する
 setopt share_history
+
+# 重複したディレクトリを追加しない
+setopt pushd_ignore_dups
 
 # 同じコマンドをヒストリに残さない
 setopt hist_ignore_all_dups
@@ -157,11 +161,14 @@ if type peco >/dev/null 2>&1; then
       if which tac > /dev/null; then
         tac="tac"
       else
-          tac="tail -r"
+        tac="tail -r"
       fi
-
       BUFFER=$(\history -n 1 | \
                  eval $tac | \
+                 # ソート
+                 #sort | uniq -c | sort -nr | \
+                 # 先頭の空白と数字を削除
+                 #sed -e 's/^[ ]*//g' | cut -d ' ' -f 2- | \
                  awk '!a[$0]++' | \
                  peco --query "$LBUFFER")
       CURSOR=$#BUFFER
@@ -169,18 +176,6 @@ if type peco >/dev/null 2>&1; then
   }
   zle -N peco-select-history
   bindkey '^r' peco-select-history
-
-  #履歴ファイルの保存先
-  export HISTFILE=${HOME}/.zsh_history
-
-  # メモリに保存される履歴の件数
-  export HISTSIZE=1000
-
-  # 履歴ファイルに保存される履歴の件数
-  export SAVEHIST=100000
-
-  # 重複を記録しない
-  setopt hist_ignore_dups
 
   # 開始と終了を記録
   setopt EXTENDED_HISTORY
