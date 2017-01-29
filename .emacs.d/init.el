@@ -517,3 +517,6 @@
           (lambda ()
             (make-local-variable 'js-indent-level)
             (setq js-indent-level 2)))
+
+;; conf-mode
+(add-to-list 'auto-mode-alist '("\\.tmux$" . conf-mode))
