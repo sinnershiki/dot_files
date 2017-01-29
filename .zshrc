@@ -183,7 +183,6 @@ if type peco >/dev/null 2>&1; then
   setopt EXTENDED_HISTORY
 fi
 
-
 ########################################
 # OS 別の設定
 case ${OSTYPE} in
@@ -201,20 +200,21 @@ darwin*)
 
     #brew
     alias brew="env PATH=${PATH/\/Users\/sinner\/\.pyenv\/shims:/} brew"
-    export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:$PATH
+    export PATH="/bin:/usr/bin:/usr/local/bin:/sbin:$PATH"
     export PATH="/usr/local/sbin:$PATH"
+    export PATH="/usr/local/bin:$PATH"
 
     #tex
-    export PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
+    export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
 
     # emacs
     alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
 
     # MySQL Path Setting
-    export PATH=$PATH:/usr/local/mysql/bin
+    export PATH="$PATH:/usr/local/mysql/bin"
 
     # postgres
-    export PGDATA=/usr/local/var/postgres
+    export PGDATA="/usr/local/var/postgres"
     ;;
 ########################################
 #Linux用の設定
@@ -227,27 +227,27 @@ linux*)
     alias ls='ls -F --color'
 
     #golang
-    export GOROOT=/usr/local/go
-    export PATH=$PATH:$GOROOT/bin
+    export GOROOT="/usr/local/go"
+    export PATH="$PATH:$GOROOT/bin"
     ;;
 esac
 
 ########################################
 # 言語
 # golang
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+export GOPATH="$HOME/go"
+export PATH="$PATH:$GOPATH/bin"
 
 # ruby:rbenv
-export PATH=$HOME/.rbenv/bin:$PATH
+export PATH="$HOME/.rbenv/bin:$PATH"
 if [ -e ~/.rbenv ]; then
   eval "$(rbenv init -)"
 fi
 
 # nodejs:nodebrew
-export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH="$HOME/.nodebrew/current/bin:$PATH"
 #export NODE_PATH=/usr/local/lib/node_modules
-#export PATH=$PATH:$NODE_PATHif type nodebrew >/dev/null 2>&1; then
+#export PATH=$PATH:$NODE_PATH
 
 # python:pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -255,6 +255,7 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 if [ -e ~/.pyenv ]; then
   eval "$(pyenv init -)"
 fi
+# pyenv-virtualenv
 if [ -e ~/.pyenv/plugins/pyenv-virtualenv ]; then
   eval "$(pyenv virtualenv-init -)"
 fi
@@ -281,7 +282,7 @@ if type hub >/dev/null 2>&1; then
 fi
 
 ### Added by the Heroku Toolbelt
-export PATH=/usr/local/heroku/bin:$PATH
+export PATH="/usr/local/heroku/bin:$PATH"
 
 # added by travis gem
 [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
