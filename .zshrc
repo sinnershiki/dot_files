@@ -128,7 +128,7 @@ alias -g L='| less'
 alias -g G='| grep'
 
 ########################################
-#tmux
+# tmux
 autoload -Uz add-zsh-hook
 function rename_tmux_window() {
    if [ $TERM = "screen" ]; then
@@ -140,7 +140,7 @@ function rename_tmux_window() {
 add-zsh-hook precmd rename_tmux_window
 
 ########################################
-# zsh拡張plugin
+# zsh plugin
 # autosuggestions
 if [ -e ~/.zsh/zsh-autosuggestions ]; then
   source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -182,14 +182,44 @@ if type peco >/dev/null 2>&1; then
 fi
 
 ########################################
-# ruby
-# rbenv
+# 言語
+# ruby:rbenv
 if [ -e ~/.rbenv ]; then
   export PATH=$HOME/.rbenv/bin:$PATH
   eval "$(rbenv init - zsh)"
 fi
 
-########################################
+# nodejs:nodebrew
+if type nodebrew >/dev/null 2>&1; then
+  export PATH=$HOME/.nodebrew/current/bin:$PATH
+  #export NODE_PATH=/usr/local/lib/node_modules
+  #export PATH=$PATH:$NODE_PATH
+fi
+
+# python:pyenv
+if [ -e ~/.pyenv ]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+  if [ -e ~/.pyenv/plugins/pyenv-virtualenv ]; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
+fi
+
+# envs update
+function envs_update(){
+    cur=$(pwd)
+    dirs=($HOME/.rbenv $HOME/.rbenv/plugins/ruby-build $HOME/.pyenv $HOME/.pyenv/plugins/pyenv-virtualenv)
+    for dir in $dirs; do
+        if [ -e $dir ]; then
+          cd $dir
+          pwd
+          git pull origin master
+        fi
+    done
+    cd $cur
+}
+
 # golang
 if type go >/dev/null 2>&1; then
   export GOPATH=$HOME/go
@@ -199,90 +229,75 @@ fi
 ########################################
 # OS 別の設定
 case ${OSTYPE} in
-    darwin*)
-        #Mac用の設定
-        ########################################
-        # terminalに関する設定
-        # プロンプト
-        PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%} %~
-%# "
-
-        export CLICOLOR=1
-        export LSCOLORS=gxfxcxdxbxegedabagacad
-        alias ls='ls -G -F'
-
-        #brew
-        alias brew="env PATH=${PATH/\/Users\/sinner\/\.pyenv\/shims:/} brew"
-
-        export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:$PATH
-        export PATH="/usr/local/sbin:$PATH"
-        ########################################
-        # 言語
-        #anyenv
-        export PATH="$HOME/.anyenv/bin:$PATH"
-        eval "$(anyenv init -)"
-
-        # added by travis gem
-        [ -f /Users/sinner/.travis/travis.sh ] && source /Users/sinner/.travis/travis.sh
-
-        # pyenv
-        export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-
-        #nodebrew
-        export PATH=$HOME/.nodebrew/current/bin:$PATH
-        #export NODE_PATH=/usr/local/lib/node_modules
-        #export PATH=$PATH:$NODE_PATH
-
-        #tex
-        export PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
-        ########################################
-        # Editor
-        # emacs
-        alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
-        alias e='emacs'
-
-        # vim
-        alias vim='/Applications/MacVim.app/Contents/MacOS/MacVim'
-
-        #vscode
-        vscode () {
-            VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
-        }
-        ########################################
-        # Etc
-        # Git
-        export PATH=/usr/local/bin:$PATH
-        export PATH=$PATH:/usr/local/Cellar/git/2.7.4
-
-        # hub command
-        function git(){hub "$@"}
-
-        # MySQL Path Setting
-        export PATH=$PATH:/usr/local/mysql/bin
-
-        # postgres
-        export PGDATA=/usr/local/var/postgres
-
-        ### Added by the Heroku Toolbelt
-        export PATH=/usr/local/heroku/bin:$PATH
-
-        #mosquitto
-        alias mosquitto_pub=/usr/local/bin/mosquitto_pub
-        alias mosquitto_sub=/usr/local/bin/mosquitto_sub
-
-        ;;
+#Mac用の設定
+darwin*)
     ########################################
-    linux*)
-        #Linux用の設定
-        # プロンプト
-        PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%} %~
+    # terminalに関する設定
+    # プロンプト
+    PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%} %~
 %# "
 
-        #ls 色付け
-        alias ls='ls -F --color'
+    export CLICOLOR=1
+    export LSCOLORS=gxfxcxdxbxegedabagacad
+    alias ls='ls -G -F'
 
-        ;;
+    #brew
+    alias brew="env PATH=${PATH/\/Users\/sinner\/\.pyenv\/shims:/} brew"
+    export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:$PATH
+    export PATH="/usr/local/sbin:$PATH"
+
+    ########################################
+    # 言語
+    #anyenv
+    export PATH="$HOME/.anyenv/bin:$PATH"
+    eval "$(anyenv init -)"
+
+    # added by travis gem
+    [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
+    #tex
+    export PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
+
+    ########################################
+    # Editor
+    # emacs
+    alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+    alias e='emacs'
+
+    # vim
+    alias vim='/Applications/MacVim.app/Contents/MacOS/MacVim'
+
+    #vscode
+    vscode () {
+        VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
+    }
+
+    ########################################
+    # Etc
+    # hub command
+    function git(){hub "$@"}
+
+    # MySQL Path Setting
+    export PATH=$PATH:/usr/local/mysql/bin
+
+    # postgres
+    export PGDATA=/usr/local/var/postgres
+
+    ### Added by the Heroku Toolbelt
+    export PATH=/usr/local/heroku/bin:$PATH
+
+    #mosquitto
+    alias mosquitto_pub=/usr/local/bin/mosquitto_pub
+    alias mosquitto_sub=/usr/local/bin/mosquitto_sub
+    ;;
+########################################
+#Linux用の設定
+linux*)
+    # プロンプト
+    PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%} %~
+%# "
+
+    #ls 色付け
+    alias ls='ls -F --color'
+    ;;
 esac
