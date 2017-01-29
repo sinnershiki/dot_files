@@ -40,7 +40,7 @@ zstyle ':completion:*' ignore-parents parent pwd ..
 
 # sudo の後ろでコマンド名を補完する
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
-    /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+       /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
 
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
@@ -118,10 +118,11 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
+alias g='git'
+alias e='emacs'
+
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
-
-alias g='git'
 
 # グローバルエイリアス
 alias -g L='| less'
@@ -156,6 +157,7 @@ fi
 # 拡張
 # peco
 if type peco >/dev/null 2>&1; then
+  alias -g P='| peco'
   function peco-select-history() {
       local tac
       if which tac > /dev/null; then
@@ -181,50 +183,6 @@ if type peco >/dev/null 2>&1; then
   setopt EXTENDED_HISTORY
 fi
 
-########################################
-# 言語
-# ruby:rbenv
-if [ -e ~/.rbenv ]; then
-  export PATH=$HOME/.rbenv/bin:$PATH
-  eval "$(rbenv init - zsh)"
-fi
-
-# nodejs:nodebrew
-if type nodebrew >/dev/null 2>&1; then
-  export PATH=$HOME/.nodebrew/current/bin:$PATH
-  #export NODE_PATH=/usr/local/lib/node_modules
-  #export PATH=$PATH:$NODE_PATH
-fi
-
-# python:pyenv
-if [ -e ~/.pyenv ]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-  if [ -e ~/.pyenv/plugins/pyenv-virtualenv ]; then
-    eval "$(pyenv virtualenv-init -)"
-  fi
-fi
-
-# envs update
-function envs_update(){
-    cur=$(pwd)
-    dirs=($HOME/.rbenv $HOME/.rbenv/plugins/ruby-build $HOME/.pyenv $HOME/.pyenv/plugins/pyenv-virtualenv)
-    for dir in $dirs; do
-        if [ -e $dir ]; then
-          cd $dir
-          pwd
-          git pull origin master
-        fi
-    done
-    cd $cur
-}
-
-# golang
-if type go >/dev/null 2>&1; then
-  export GOPATH=$HOME/go
-  export PATH=$PATH:$GOPATH/bin
-fi
 
 ########################################
 # OS 別の設定
@@ -246,49 +204,17 @@ darwin*)
     export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:$PATH
     export PATH="/usr/local/sbin:$PATH"
 
-    ########################################
-    # 言語
-    #anyenv
-    export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init -)"
-
-    # added by travis gem
-    [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
-
     #tex
     export PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
 
-    ########################################
-    # Editor
     # emacs
     alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
-    alias e='emacs'
-
-    # vim
-    alias vim='/Applications/MacVim.app/Contents/MacOS/MacVim'
-
-    #vscode
-    vscode () {
-        VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
-    }
-
-    ########################################
-    # Etc
-    # hub command
-    function git(){hub "$@"}
 
     # MySQL Path Setting
     export PATH=$PATH:/usr/local/mysql/bin
 
     # postgres
     export PGDATA=/usr/local/var/postgres
-
-    ### Added by the Heroku Toolbelt
-    export PATH=/usr/local/heroku/bin:$PATH
-
-    #mosquitto
-    alias mosquitto_pub=/usr/local/bin/mosquitto_pub
-    alias mosquitto_sub=/usr/local/bin/mosquitto_sub
     ;;
 ########################################
 #Linux用の設定
@@ -299,5 +225,63 @@ linux*)
 
     #ls 色付け
     alias ls='ls -F --color'
+
+    #golang
+    export GOROOT=/usr/local/go
+    export PATH=$PATH:$GOROOT/bin
     ;;
 esac
+
+########################################
+# 言語
+# golang
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
+# ruby:rbenv
+export PATH=$HOME/.rbenv/bin:$PATH
+if [ -e ~/.rbenv ]; then
+  eval "$(rbenv init -)"
+fi
+
+# nodejs:nodebrew
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+#export NODE_PATH=/usr/local/lib/node_modules
+#export PATH=$PATH:$NODE_PATHif type nodebrew >/dev/null 2>&1; then
+
+# python:pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if [ -e ~/.pyenv ]; then
+  eval "$(pyenv init -)"
+fi
+if [ -e ~/.pyenv/plugins/pyenv-virtualenv ]; then
+  eval "$(pyenv virtualenv-init -)"
+fi
+
+# envs update
+function envs_update(){
+    cur=$(pwd)
+    dirs=($HOME/.rbenv $HOME/.rbenv/plugins/ruby-build $HOME/.pyenv $HOME/.pyenv/plugins/pyenv-virtualenv)
+    for dir in $dirs; do
+        if [ -e $dir ]; then
+          cd $dir
+          pwd
+          git pull origin master
+        fi
+    done
+    cd $cur
+}
+
+########################################
+# Etc
+# hub command
+if type hub >/dev/null 2>&1; then
+  function git(){hub "$@"}
+fi
+
+### Added by the Heroku Toolbelt
+export PATH=/usr/local/heroku/bin:$PATH
+
+# added by travis gem
+[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
