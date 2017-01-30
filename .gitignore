@@ -4,3 +4,5 @@
 /.emacs.d/*
 !/.emacs.d/init.el
 !/.emacs.d/conf
+/.byobu/*
+!/.byobu/.tmux.conf
