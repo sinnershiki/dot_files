@@ -127,30 +127,58 @@ alias sudo='sudo '
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G='| grep'
+alias -g R="| uniq -c | sort -k1nr | sed -e 's/^[ ]*//g' "
 
 ########################################
 # tmux
 autoload -Uz add-zsh-hook
 function rename_tmux_window() {
-   if [ $TERM = "screen" ]; then
-       local current_path=`pwd | sed -e s/\ /_/g`
-       local current_dir=`basename $current_path`
-       tmux rename-window $current_dir
-   fi
+  if [ $TERM = "screen" ]; then
+    local current_path=`pwd | sed -e s/\ /_/g`
+    local current_dir=`basename $current_path`
+    tmux rename-window $current_dir
+  fi
 }
 add-zsh-hook precmd rename_tmux_window
 
 ########################################
 # zsh plugin
-# autosuggestions
-if [ -e ~/.zsh/zsh-autosuggestions ]; then
-  source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
+# zplug
+if [ -e ~/.zplug ]; then
+  source ~/.zplug/init.zsh
+  zplug "zplug/zplug"
 
-# autojump
-if [ -e ~/.autojump ]; then
-  [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
-  autoload -U compinit && compinit -u
+  # autosaggestions
+  zplug "zsh-users/zsh-autosuggestions"
+
+  # enhancd
+  zplug "b4b4r07/enhancd", use:init.sh
+  ENHANCD_FILTER=peco
+
+  # cd-gitroot
+  zplug "mollifier/cd-gitroot"
+  alias cdu='cd-gitroot'
+
+  # zsh-completions
+  zplug "zsh-users/zsh-completions"
+
+  # 256-color
+  zplug "chrissicool/zsh-256color"
+
+  # zsh-syntax-highlighting は compinit の前に読み込まれる必要がある
+  # （2 以上は compinit 後に読み込まれるようになる）
+  zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+  # 未インストール項目をインストールする
+  if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+      echo; zplug install
+    fi
+  fi
+
+  # コマンドをリンクして、PATH に追加し、プラグインは読み込む
+  zplug load --verbose
 fi
 
 ########################################
@@ -168,7 +196,7 @@ if type peco >/dev/null 2>&1; then
       BUFFER=$(\history -n 1 | \
                  eval $tac | \
                  # ソート
-                 #sort | uniq -c | sort -nr | \
+                 #uniq -c | sort -k1nr | \
                  # 先頭の空白と数字を削除
                  #sed -e 's/^[ ]*//g' | cut -d ' ' -f 2- | \
                  awk '!a[$0]++' | \
