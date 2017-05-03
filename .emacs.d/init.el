@@ -404,6 +404,8 @@
 (add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rubotygenerator$" . ruby-mode))
+(add-to-list 'auto-mode-alist '(".env$" . conf-mode))
 ;; 括弧の後のインデントが深くなるのを防ぐ
 (setq ruby-deep-indent-paren-style nil)
 ;; マジックコメントの自動挿入を停止

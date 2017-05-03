@@ -165,10 +165,6 @@ if [ -e ~/.zplug ]; then
   # 256-color
   zplug "chrissicool/zsh-256color"
 
-  # zsh-syntax-highlighting は compinit の前に読み込まれる必要がある
-  # （2 以上は compinit 後に読み込まれるようになる）
-  zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
   # 未インストール項目をインストールする
   if ! zplug check --verbose; then
     printf "Install? [y/N]: "
