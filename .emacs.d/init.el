@@ -14,6 +14,7 @@
 
 ;; el-get https://github.com/dimitri/el-get
 (add-to-list 'load-path (locate-user-emacs-file "el-get"))
+(add-to-list 'load-path (locate-user-emacs-file "el-get/el-get"))
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
       (url-retrieve-synchronously
@@ -177,6 +178,7 @@
 ;;---------------------------------------------------
 ;; sequential-command
 (el-get-bundle sequential-command)
+;;(el-get-bundle sequential-command-config)
 (require 'sequential-command)
 (require 'sequential-command-config)
 (global-set-key "\C-a" 'seq-home)
@@ -234,7 +236,7 @@
  '(anzu-search-threshold 1000)
  '(package-selected-packages
    (quote
-    (latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
+    (company-go php-completion groovy-mode latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
  '(safe-local-variable-values
    (quote
     ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
@@ -378,7 +380,7 @@
    for index from 1 to rainbow-delimiters-max-face-count
    do
    (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
-    (cl-callf color-saturate-name (face-foreground face) 30))))
+     (cl-callf color-saturate-name (face-foreground face) 30))))
 (add-hook 'emacs-startup-hook 'rainbow-delimiters-using-stronger-colors)
 
 ;; org-tree-slide
@@ -433,11 +435,44 @@
 ;; haml-mode
 (el-get-bundle haml-mode)
 
+;; go-mode
+(el-get-bundle go-mode)
+(add-hook 'go-mode-hook 'company-mode)
+(add-hook 'go-mode-hook 'flycheck-mode)
+(add-hook 'go-mode-hook (lambda()
+                          (add-hook 'before-save-hook' 'gofmt-before-save)
+                          (local-set-key (kbd "M-.") 'godef-jump)
+                          (set (make-local-variable 'company-backends) '(company-go))
+                          (company-mode)
+                          (setq indent-tabs-mode nil)    ; タブを利用
+                          (setq c-basic-offset 4)        ; tabサイズを4にする
+                          (setq tab-width 4)))
+(el-get-bundle go-eldoc)
+(add-hook 'go-mode-hook 'go-eldoc-setup)
+(set-face-attribute 'eldoc-highlight-function-argument nil
+                    :underline t :foreground "green"
+                    :weight 'bold)
+
 ;; haskell-mode
 (el-get-bundle haskell-mode)
 (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
 (add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
 (add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
+
+;; java mode
+(add-hook 'java-mode-hook (lambda ()
+                            (setq c-basic-offset 4)))
+
+;; Groovy mode
+(el-get-bundle groovy-mode)
+(add-to-list 'auto-mode-alist '("\.groovy$" . groovy-mode))
+(add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))
+(add-to-list 'interpreter-mode-alist '("groovy" . groovy-mode))
+(add-hook 'groovy-mode-hook (lambda ()
+                              (setq c-basic-offset 4)))
+
+;; Gradle mode(minor)
+(el-get-bundle gradle-mode)
 
 ;; js-mode
 (el-get-bundle js2-mode)
@@ -457,7 +492,7 @@
        (set (make-local-variable 'coffee-tab-width) 2))
   )
 (add-hook 'coffee-mode-hook
-  '(lambda() (coffee-custom)))
+          '(lambda() (coffee-custom)))
 
 ;; python
 (el-get-bundle python-mode)
@@ -470,6 +505,42 @@
 (setq-default sh-indentation 2
               sh-indent-for-case-label 0
               sh-indent-for-case-alt '+)
+
+;; php-mode
+(el-get-bundle php-mode)
+(el-get-bundle web-mode)
+
+;; web-modeの設定
+(add-hook 'web-mode-hook 'web-mode-hook)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[gj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(setq web-mode-engines-alist
+      '(("php"    . "\\.phtml\\'")
+        ("blade"  . "\\.blade\\.")))
+(defun web-mode-hook ()
+  (setq web-mode-markup-indent-offset 4)
+  (setq web-mode-css-indent-offset 4)
+  (setq web-mode-code-indent-offset 4))
+
+(el-get-bundle php-completion)
+(add-hook 'php-mode-hook
+          (lambda ()
+            (require 'php-completion)
+            (php-completion-mode t)
+            (define-key php-mode-map (kbd "C-o") 'phpcmp-complete)
+            (make-local-variable 'ac-sources)
+            (setq ac-sources '(
+                               ac-source-words-in-same-mode-buffers
+                               ac-source-php-completion
+                               ac-source-filename
+                               ))))
+
 
 ;; markdown-mode
 (el-get-bundle markdown-mode)
@@ -522,3 +593,9 @@
 
 ;; conf-mode
 (add-to-list 'auto-mode-alist '("\\.tmux$" . conf-mode))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
