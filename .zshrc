@@ -121,6 +121,8 @@ alias mv='mv -i'
 alias g='git'
 alias e='emacs'
 
+alias pbcopy="nkf -w | __CF_USER_TEXT_ENCODING=0x$(printf %x $(id -u)):0x08000100:14 pbcopy"
+
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
 
@@ -164,6 +166,10 @@ if [ -e ~/.zplug ]; then
 
   # 256-color
   zplug "chrissicool/zsh-256color"
+
+  # zsh-syntax-highlighting は compinit の前に読み込まれる必要がある
+  # （2 以上は compinit 後に読み込まれるようになる）
+  # zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
   # 未インストール項目をインストールする
   if ! zplug check --verbose; then
@@ -223,7 +229,7 @@ darwin*)
     alias ls='ls -G -F'
 
     #brew
-    alias brew="env PATH=${PATH/\/Users\/sinner\/\.pyenv\/shims:/} brew"
+    alias brew="env PATH=${PATH/\/Users\/sugano-kosuke\/\.pyenv\/shims:/} brew"
     export PATH="/bin:/usr/bin:/usr/local/bin:/sbin:$PATH"
     export PATH="/usr/local/sbin:$PATH"
     export PATH="/usr/local/bin:$PATH"
@@ -239,6 +245,30 @@ darwin*)
 
     # postgres
     export PGDATA="/usr/local/var/postgres"
+
+    # Java classpath
+    export CLASSPATH="$CLASSPATH:/Users/sugano-kosuke/Library/jdbc/mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar"
+
+    # Maven3
+    export M3_HOME=/usr/local/apache-maven-3.3.3
+    M3=$M3_HOME/bin
+    export PATH=$M3:$PATH
+
+    # tomcat
+    # alias tomcat='catalina'
+
+    # openssl
+    export PATH="/usr/local/opt/openssl/bin:$PATH"
+
+    # cd active finder
+    cdf() {
+        target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
+        if [ "$target" != "" ]; then
+          cd "$target"; pwd
+        else
+            echo 'No Finder window found' >&2
+        fi
+    }
     ;;
 ########################################
 #Linux用の設定
@@ -259,7 +289,8 @@ esac
 ########################################
 # 言語
 # golang
-export GOPATH="$HOME/go"
+export PATH="$PATH:/usr/local/opt/go/libexec/bin"
+export GOPATH="$HOME/.go"
 export PATH="$PATH:$GOPATH/bin"
 
 # ruby:rbenv
@@ -283,6 +314,14 @@ fi
 if [ -e ~/.pyenv/plugins/pyenv-virtualenv ]; then
   eval "$(pyenv virtualenv-init -)"
 fi
+
+# php-nabe
+export PATH=$HOME/.php-nabe/bin:$PATH
+
+# composer
+export PATH="$HOME/.composer:$PATH"
+export PATH="$HOME/.composer/vendor/bin:$PATH"
+alias composer="composer.phar"
 
 # envs update
 function envs_update(){
@@ -310,3 +349,12 @@ export PATH="/usr/local/heroku/bin:$PATH"
 
 # added by travis gem
 [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
+
+function tomcat7(){
+    export PATH="/usr/local/opt/tomcat@7/bin:$PATH"
+    catalina
+}
+#tomcat 7
+alias tomcat7="/usr/local/opt/tomcat@7/bin/catalina"
+alias tomcat="/usr/local/bin/catalina"
