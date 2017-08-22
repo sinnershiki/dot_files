@@ -236,7 +236,7 @@
  '(anzu-search-threshold 1000)
  '(package-selected-packages
    (quote
-    (company-go php-completion groovy-mode latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
+    (apples-mode company-go php-completion groovy-mode latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
  '(safe-local-variable-values
    (quote
     ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
@@ -571,6 +571,8 @@
              (YaTeX-define-key "\C-j" 'latex-math-preview-last-symbol-again)
              (YaTeX-define-key "\C-b" 'latex-math-preview-beamer-frame)))
 (setq latex-math-preview-in-math-mode-p-func 'YaTeX-in-math-mode-p)
+
+(el-get-bundle apples-mode)
 
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------

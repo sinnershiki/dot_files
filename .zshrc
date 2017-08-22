@@ -1,6 +1,7 @@
 ########################################
 # 環境変数
 export LANG=ja_JP.UTF-8
+export LESSCHARSET=utf-8
 
 # 色を使用出来るようにする
 autoload -Uz colors
@@ -238,7 +239,7 @@ darwin*)
     export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
 
     # emacs
-    alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+    alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 
     # MySQL Path Setting
     export PATH="$PATH:/usr/local/mysql/bin"
@@ -248,14 +249,6 @@ darwin*)
 
     # Java classpath
     export CLASSPATH="$CLASSPATH:/Users/sugano-kosuke/Library/jdbc/mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar"
-
-    # Maven3
-    export M3_HOME=/usr/local/apache-maven-3.3.3
-    M3=$M3_HOME/bin
-    export PATH=$M3:$PATH
-
-    # tomcat
-    # alias tomcat='catalina'
 
     # openssl
     export PATH="/usr/local/opt/openssl/bin:$PATH"
@@ -269,6 +262,11 @@ darwin*)
             echo 'No Finder window found' >&2
         fi
     }
+
+    # log
+    # NOW=`date +%Y%m%d%H%M%S`;
+    # LOGFILE=/Users/${USER}/.log/terminal-logs/${NOW}.log;
+    # script ${LOGFILE}
     ;;
 ########################################
 #Linux用の設定
