@@ -121,6 +121,7 @@ alias mv='mv -i'
 
 alias g='git'
 alias e='emacs'
+alias grep='grep --color'
 
 alias pbcopy="nkf -w | __CF_USER_TEXT_ENCODING=0x$(printf %x $(id -u)):0x08000100:14 pbcopy"
 
