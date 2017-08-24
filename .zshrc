@@ -240,7 +240,8 @@ darwin*)
     export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
 
     # emacs
-    alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+    alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+    alias emacsnw='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 
     # MySQL Path Setting
     export PATH="$PATH:/usr/local/mysql/bin"
