@@ -351,6 +351,7 @@ current buffer directory."
 ;; projectile
 ;; Enable projectile-mode, open a file in one of your projects and type a command such as C-c p f.
 (el-get-bundle projectile)
+(projectile-global-mode)
 
 ;; hlinum linum-modeのハイライト
 (el-get-bundle tom-tan/hlinum-mode)
@@ -577,7 +578,7 @@ current buffer directory."
 (setq YaTeX-kanji-code 4)
 ;;%#BIBTEX jbibtex paper
 ;; reftex-mode
-(add-hook 'yatex-mode-hook 'turn-on-reftex)
+(add-hook 'yatex-mode-hook 'turn-on-Reftex)
 
 ;; latex-math-preview
 (el-get-bundle latex-math-preview)
@@ -592,15 +593,6 @@ current buffer directory."
 
 ;; apple script
 (el-get-bundle apples-mode)
-
-;; ansible
-(el-get-bundle s)
-;;(el-get-bundle k1LoW/emacs-ansible)
-;;(add-hook 'yaml-mode-hook '(lambda () (ansible 1)))
-;;(setq ansible::vault-password-file "~/.vault_pass")
-;;(global-set-key (kbd "C-c b") 'ansible::decrypt-buffer)
-;;(global-set-key (kbd "C-c g") 'ansible::encrypt-buffer)
-;;(add-hook 'ansible-hook 'ansible::auto-decrypt-encrypt)
 
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------
