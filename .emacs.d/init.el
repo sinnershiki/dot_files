@@ -299,6 +299,7 @@
 
 ;; neotree
 (el-get-bundle neotree)
+(require 'neotree)
 ;; 隠しファイルをデフォルトで表示
 (setq-default neo-show-hidden-files t)
 (setq neo-smart-open t)
@@ -546,19 +547,6 @@ current buffer directory."
   (setq web-mode-markup-indent-offset 4)
   (setq web-mode-css-indent-offset 4)
   (setq web-mode-code-indent-offset 4))
-
-(el-get-bundle php-completion)
-(add-hook 'php-mode-hook
-          (lambda ()
-            (require 'php-completion)
-            (php-completion-mode t)
-            (define-key php-mode-map (kbd "C-o") 'phpcmp-complete)
-            (make-local-variable 'ac-sources)
-            (setq ac-sources '(
-                               ac-source-words-in-same-mode-buffers
-                               ac-source-php-completion
-                               ac-source-filename
-                               ))))
 
 
 ;; markdown-mode
