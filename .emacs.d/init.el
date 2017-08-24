@@ -299,10 +299,28 @@
 
 ;; neotree
 (el-get-bundle neotree)
-(global-set-key (kbd "C-x n") 'neotree-toggle)
 ;; 隠しファイルをデフォルトで表示
 (setq-default neo-show-hidden-files t)
 (setq neo-smart-open t)
+(defun neotree-project-root-dir-or-current-dir ()
+  "Open NeoTree using the project root, using projectile, or the
+current buffer directory."
+  (interactive)
+  (let ((project-dir (ignore-errors (projectile-project-root)))
+        (file-name (buffer-file-name))
+        (neo-smart-open t))
+    (if (neo-global--window-exists-p)
+        (neotree-hide)
+      (progn
+        (neotree-show)
+        (if project-dir
+            (neotree-dir project-dir))
+        (if file-name
+            (neotree-find file-name))))))
+(setq projectile-switch-project-action 'neotree-projectile-action)
+;;(global-set-key (kbd "C-x n") 'neotree-toggle)
+(global-set-key (kbd "C-x n") 'neotree-project-root-dir-or-current-dir)
+(setq neo-autorefresh nil)
 
 ;; editorconfig
 (el-get-bundle editorconfig)
@@ -454,10 +472,10 @@
                     :weight 'bold)
 
 ;; haskell-mode
-(el-get-bundle haskell-mode)
-(add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
-(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
-(add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
+;;(el-get-bundle haskell-mode)
+;;(add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
+;;(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
+;;(add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
 
 ;; java mode
 (add-hook 'java-mode-hook (lambda ()
@@ -572,7 +590,17 @@
              (YaTeX-define-key "\C-b" 'latex-math-preview-beamer-frame)))
 (setq latex-math-preview-in-math-mode-p-func 'YaTeX-in-math-mode-p)
 
+;; apple script
 (el-get-bundle apples-mode)
+
+;; ansible
+(el-get-bundle s)
+;;(el-get-bundle k1LoW/emacs-ansible)
+;;(add-hook 'yaml-mode-hook '(lambda () (ansible 1)))
+;;(setq ansible::vault-password-file "~/.vault_pass")
+;;(global-set-key (kbd "C-c b") 'ansible::decrypt-buffer)
+;;(global-set-key (kbd "C-c g") 'ansible::encrypt-buffer)
+;;(add-hook 'ansible-hook 'ansible::auto-decrypt-encrypt)
 
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------
