@@ -358,3 +358,14 @@ function tomcat7(){
 #tomcat 7
 alias tomcat7="/usr/local/opt/tomcat@7/bin/catalina"
 alias tomcat="/usr/local/bin/catalina"
+
+#cd .. bindkey
+function cd_up() {
+    # やりたい処理
+    \cd ..
+    # キー実行時のプロンプトの内容は $BUFFER で取れる
+    #zle .reset-prompt  # プロンプトを再描画
+    zle .accept-line
+}
+zle -N cd_up
+bindkey '^u' cd_up
