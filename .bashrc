@@ -1,8 +1,5 @@
 # .bashrc
-PS_OK=$'\n''%F{green}CURRENT=%~'$'\n%F{yellow}✖╹◡╹✖ %F{magenta}☆☆☆  %F{nomal}'
-PS_NG=$'\n''%F{red}CURRENT=%~'$'\n%F{yellow}xX_Xx %F{magenta}☆☆☆  %F{nomal}'
-
-PS1="%0(?|${PS_OK}|${PS_NG})"
+PS1="\[\e[36m\e[40m\][\u@\h \W \d \t]\[\e[0m\]\n\\$ "
 
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
