@@ -31,23 +31,23 @@
 ;;---------------------------------------------------
 ;; system-type predicates
 (defun x->bool (elt) (not (not elt)))
-(setq darwin-p  (eq system-type 'darwin)
-      ns-p      (eq window-system 'ns)
-      carbon-p  (eq window-system 'mac)
-      linux-p   (eq system-type 'gnu/linux)
-      colinux-p (when linux-p
-                  (let ((file "/proc/modules"))
-                    (and
-                     (file-readable-p file)
-                     (x->bool
-                      (with-temp-buffer
-                        (insert-file-contents file)
-                        (goto-char (point-min))
-                        (re-search-forward "^cofuse\.+" nil t))))))
-      cygwin-p  (eq system-type 'cygwin)
-      nt-p      (eq system-type 'windows-nt)
-      meadow-p  (featurep 'meadow)
-      windows-p (or cygwin-p nt-p meadow-p))
+(setq  darwin-p  (eq system-type 'darwin)
+       ns-p      (eq window-system 'ns)
+       carbon-p  (eq window-system 'mac)
+       linux-p   (eq system-type 'gnu/linux)
+       colinux-p (when linux-p
+                   (let ((file "/proc/modules"))
+                     (and
+                      (file-readable-p file)
+                      (x->bool
+                       (with-temp-buffer
+                         (insert-file-contents file)
+                         (goto-char (point-min))
+                         (re-search-forward "^cofuse\.+" nil t))))))
+       cygwin-p  (eq system-type 'cygwin)
+       nt-p      (eq system-type 'windows-nt)
+       meadow-p  (featurep 'meadow)
+       windows-p (or cygwin-p nt-p meadow-p))
 
 ;; 起動時に出てくるメッセージを消す
 (setq inhibit-startup-message t)
@@ -106,6 +106,11 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(expand-file-name "~/.emacs.d/backups/") t)))
 
+;; 矩形選択
+(cua-mode t)
+(setq cua-enable-cua-keys nil) ; デフォルトキーバインドを無効化
+;;(define-key global-map (kbd "C-x SPC") 'cua-set-rectangle-mark)
+
 ;;----------------------------------------------------
 ;;
 ;; Text and Font
@@ -152,8 +157,8 @@
     (other-window 1)
     (set-window-buffer thiswin (window-buffer))
     (set-window-buffer (selected-window) thisbuf)))
-(global-set-key [f2] 'swap-screen)
-(global-set-key [S-f2] 'swap-screen-with-cursor)
+(global-set-key [f12] 'swap-screen)
+(global-set-key [S-f12] 'swap-screen-with-cursor)
 
 ;; 対応する括弧をハイライト
 (show-paren-mode t)
@@ -304,8 +309,7 @@
 (setq-default neo-show-hidden-files t)
 (setq neo-smart-open t)
 (defun neotree-project-root-dir-or-current-dir ()
-  "Open NeoTree using the project root, using projectile, or the
-current buffer directory."
+  "Open NeoTree using the project root, using projectile, or the current buffer directory."
   (interactive)
   (let ((project-dir (ignore-errors (projectile-project-root)))
         (file-name (buffer-file-name))
@@ -395,6 +399,7 @@ current buffer directory."
 (require 'cl-lib)
 (require 'color)
 (defun rainbow-delimiters-using-stronger-colors ()
+  "rainbow ()"
   (interactive)
   (cl-loop
    for index from 1 to rainbow-delimiters-max-face-count
