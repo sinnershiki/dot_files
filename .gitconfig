@@ -16,12 +16,15 @@
     cmm = commit -m
     co = checkout
     cob = checkout -b
+    com = checkout master
+    cod = checkout develop
     stt = status -uno
     difff = diff --word-diff
     unstage = reset HEAD
+    rename = "!sh -c 'git mv $1 __tmp; git mv __tmp $2' -"
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
