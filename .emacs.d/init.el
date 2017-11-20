@@ -111,6 +111,18 @@
 (setq cua-enable-cua-keys nil) ; デフォルトキーバインドを無効化
 ;;(define-key global-map (kbd "C-x SPC") 'cua-set-rectangle-mark)
 
+;; ediff
+(global-set-key (kbd "C-c d")  'ediff-buffers)
+;;(add-hook 'ediff-mode-hook 'scroll-all-mode)
+;; コントロール用のバッファを同一フレーム内に表示
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;; diffのバッファを上下ではなく左右に並べる
+(setq ediff-split-window-function 'split-window-horizontally)
+
+
+;; diredでcpとかmvとかできる
+(setq dired-dwim-target t)
+
 ;;----------------------------------------------------
 ;;
 ;; Text and Font
@@ -260,7 +272,16 @@
 
 ;; autocomplete
 (el-get-bundle auto-complete)
+(el-get-bundle auto-complete/fuzzy-el)
 (ac-config-default)
+(setq ac-use-menu-map t)
+(add-to-list 'ac-modes 'text-mode) ;; text-modeでも自動的に有効にする
+(add-to-list 'ac-modes 'fundamental-mode) ;; fundamental-mode
+(add-to-list 'ac-modes 'org-mode)
+(add-to-list 'ac-modes 'yatex-mode)
+(ac-set-trigger-key "TAB")
+(setq ac-use-menu-map t) ;; 補完メニュー表示時にC-n/C-pで補完候補選択
+(setq ac-use-fuzzy t)
 
 ;; yasnippet
 (el-get-bundle yasnippet)
@@ -289,8 +310,8 @@
 (global-set-key (kbd "C-c m") 'magit-status)
 
 ;; twittering mode
-(el-get-bundle twittering-mode)
-(setq twittering-use-master-password t)
+;; (el-get-bundle twittering-mode)
+;; (setq twittering-use-master-password t)
 
 ;; tramp
 (el-get-bundle tramp)
@@ -323,8 +344,8 @@
         (if file-name
             (neotree-find file-name))))))
 (setq projectile-switch-project-action 'neotree-projectile-action)
-;;(global-set-key (kbd "C-x n") 'neotree-toggle)
-(global-set-key (kbd "C-x n") 'neotree-project-root-dir-or-current-dir)
+;;(global-set-key (kbd "C-c n") 'neotree-toggle)
+(global-set-key (kbd "C-c n") 'neotree-project-root-dir-or-current-dir)
 (setq neo-autorefresh nil)
 
 ;; editorconfig
@@ -527,9 +548,14 @@
 (el-get-bundle elixir-lang/emacs-elixir)
 
 ;; sh-mode
-(setq-default sh-indentation 2
-              sh-indent-for-case-label 0
-              sh-indent-for-case-alt '+)
+(defun init-sh-mode ()
+  "My own personal preferences for `sh-mode'."
+  (setq sh-basic-offset 2
+        sh-indentation 2
+        sh-indent-for-case-label 0
+        sh-indent-for-case-alt '+))
+
+(add-hook 'sh-mode-hook 'init-sh-mode)
 
 ;; php-mode
 (el-get-bundle php-mode)
@@ -557,32 +583,32 @@
 ;; markdown-mode
 (el-get-bundle markdown-mode)
 
-;; yatex-mode
-;; run yatex mode when open .tex file
-(el-get-bundle yatex)
-(setq auto-mode-alist
-      (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
-(autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
-(setq YaTeX-prefix "\C-t")
-(setq tex-command "platex")
-(setq bibtex-command "pbibtex")
-(setq dviprint-command-format "dvipdfmx %s")
-;; use utf-8 on yatex mode
-(setq YaTeX-kanji-code 4)
-;;%#BIBTEX jbibtex paper
-;; reftex-mode
-(add-hook 'yatex-mode-hook 'turn-on-Reftex)
+;; ;; yatex-mode
+;; ;; run yatex mode when open .tex file
+;; (el-get-bundle yatex)
+;; (setq auto-mode-alist
+;;       (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
+;; (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
+;; (setq YaTeX-prefix "\C-t")
+;; (setq tex-command "platex")
+;; (setq bibtex-command "pbibtex")
+;; (setq dviprint-command-format "dvipdfmx %s")
+;; ;; use utf-8 on yatex mode
+;; (setq YaTeX-kanji-code 4)
+;; ;;%#BIBTEX jbibtex paper
+;; ;; reftex-mode
+;; (add-hook 'yatex-mode-hook 'turn-on-Reftex)
 
-;; latex-math-preview
-(el-get-bundle latex-math-preview)
-(add-hook 'yatex-mode-hook
-          '(lambda ()
-             (YaTeX-define-key "p" 'latex-math-preview-expression)
-             (YaTeX-define-key "\C-p" 'latex-math-preview-save-image-file)
-             (YaTeX-define-key "j" 'latex-math-preview-insert-symbol)
-             (YaTeX-define-key "\C-j" 'latex-math-preview-last-symbol-again)
-             (YaTeX-define-key "\C-b" 'latex-math-preview-beamer-frame)))
-(setq latex-math-preview-in-math-mode-p-func 'YaTeX-in-math-mode-p)
+;; ;; latex-math-preview
+;; (el-get-bundle latex-math-preview)
+;; (add-hook 'yatex-mode-hook
+;;           '(lambda ()
+;;              (YaTeX-define-key "p" 'latex-math-preview-expression)
+;;              (YaTeX-define-key "\C-p" 'latex-math-preview-save-image-file)
+;;              (YaTeX-define-key "j" 'latex-math-preview-insert-symbol)
+;;              (YaTeX-define-key "\C-j" 'latex-math-preview-last-symbol-again)
+;;              (YaTeX-define-key "\C-b" 'latex-math-preview-beamer-frame)))
+;; (setq latex-math-preview-in-math-mode-p-func 'YaTeX-in-math-mode-p)
 
 ;; apple script
 (el-get-bundle apples-mode)
