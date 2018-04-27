@@ -109,7 +109,7 @@
 ;; 矩形選択
 (cua-mode t)
 (setq cua-enable-cua-keys nil) ; デフォルトキーバインドを無効化
-;;(define-key global-map (kbd "C-x SPC") 'cua-set-rectangle-mark)
+(define-key global-map (kbd "C-x SPC") 'cua-set-rectangle-mark)
 
 ;; ediff
 (global-set-key (kbd "C-c d")  'ediff-buffers)
@@ -193,6 +193,9 @@
 
 ;; 便利系
 ;;---------------------------------------------------
+;; pbcopy
+(el-get-bundle pbcopy)
+
 ;; sequential-command
 (el-get-bundle sequential-command)
 ;;(el-get-bundle sequential-command-config)
@@ -624,6 +627,15 @@
 
 ;; nginx-mode
 (el-get-bundle nginx-mode)
+(add-to-list 'auto-mode-alist '("server.conf$" . nginx-mode))
+(add-to-list 'auto-mode-alist '("nginx.conf$" . nginx-mode))
+(add-to-list 'auto-mode-alist '("default.conf$" . nginx-mode))
+
+;; apache-mode
+(el-get-bundle apache-mode)
+(add-to-list 'auto-mode-alist '("Secure$" . apache-mode))
+(add-to-list 'auto-mode-alist '("Virtual$" . apache-mode))
+
 
 ;; json-mode
 (el-get-bundle json-mode)
