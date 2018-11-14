@@ -232,12 +232,18 @@ darwin*)
     export PATH="/usr/local/sbin:$PATH"
     export PATH="/usr/local/bin:$PATH"
 
-    #tex
+    # tmux
+    export TMUX_TMPDIR="/tmp"
+
+    # tex
     export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
 
     # emacs
     alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
     alias emacsnw='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+
+    # sonar-scanner
+    alias sonar-scanner='/Users/sugano-kosuke/.sonar-scanner-3.0.3.778-macosx/bin/sonar-scanner'
 
     # MySQL Path Setting
     export PATH="$PATH:/usr/local/mysql/bin"
@@ -261,10 +267,12 @@ darwin*)
         fi
     }
 
-    # log
-    # NOW=`date +%Y%m%d%H%M%S`;
-    # LOGFILE=/Users/${USER}/.log/terminal-logs/${NOW}.log;
-    # script ${LOGFILE}
+    ### Added by the Heroku Toolbelt
+    export PATH="/usr/local/heroku/bin:$PATH"
+
+    # added by travis gem
+    [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
     ;;
 ########################################
 #Linux用の設定
@@ -337,34 +345,23 @@ function envs_update(){
 }
 
 ########################################
-# Etc
-# hub command
+# ETC
+#cd .. bindkey
+function cd_up() {
+  # やりたい処理
+  \cd ..
+  # キー実行時のプロンプトの内容は $BUFFER で取れる
+  #zle .reset-prompt  # プロンプトを再描画
+  zle .accept-line
+}
+zle -N cd_up
+bindkey '^u' cd_up
+
+# hub
 if type hub >/dev/null 2>&1; then
   function git(){hub "$@"}
 fi
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
-# added by travis gem
-[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
-
-
-function tomcat7(){
-    export PATH="/usr/local/opt/tomcat@7/bin:$PATH"
-    catalina
-}
-#tomcat 7
-alias tomcat7="/usr/local/opt/tomcat@7/bin/catalina"
-alias tomcat="/usr/local/bin/catalina"
-
-#cd .. bindkey
-function cd_up() {
-    # やりたい処理
-    \cd ..
-    # キー実行時のプロンプトの内容は $BUFFER で取れる
-    #zle .reset-prompt  # プロンプトを再描画
-    zle .accept-line
-}
-zle -N cd_up
-bindkey '^u' cd_up
+# ghq + peco + hub alias
+alias gcd='cd $(ghq root)/$(ghq list | peco)'
+alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
