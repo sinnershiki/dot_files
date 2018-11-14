@@ -96,6 +96,7 @@
 
 ;; 保存するタイミングでdelete-trailing-whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(global-set-key (kbd "C-x t")  'delete-trailing-whitespace)
 
 ;; リージョン削除
 (delete-selection-mode t)
@@ -246,6 +247,7 @@
 (el-get-bundle anzu)
 (global-anzu-mode +1)
 (global-set-key (kbd "C-x q") 'anzu-query-replace)
+(global-set-key (kbd "C-x C-q") 'anzu-query-replace)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -256,7 +258,7 @@
  '(anzu-search-threshold 1000)
  '(package-selected-packages
    (quote
-    (apples-mode company-go php-completion groovy-mode latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
+    (flymake-python-pyflakes apples-mode company-go php-completion groovy-mode latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
  '(safe-local-variable-values
    (quote
     ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
@@ -320,6 +322,9 @@
 (el-get-bundle tramp)
 (add-to-list 'backup-directory-alist
              (cons tramp-file-name-regexp nil))
+(el-get-bundle docker-tramp)
+(require 'docker-tramp-compat)
+(set-variable 'docker-tramp-use-names t)
 
 ;; window
 ;; Then use C-S-<left>, C-S-<right>, C-S-<up>, and C-S-<down> to move window edges.
@@ -448,8 +453,16 @@
 ;;(push '("*math-mode-signs*") popwin:special-display-config)
 ;;(push '("*YaTeX-typesetting*") popwin:special-display-config)
 
+;; exec-path-from-shell
+(el-get-bundle exec-path-from-shell)
+(exec-path-from-shell-initialize)
+
 ;; 言語系
 ;;---------------------------------------------------
+;; flymake
+;; (el-get-bundle flymake)
+;; (el-get-bundle flymake-cursor)
+
 ;; ruby-mode
 (el-get-bundle ruby-mode)
 (add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
@@ -545,6 +558,18 @@
 
 ;; python
 (el-get-bundle python-mode)
+;; (el-get-bundle purcell/flymake-python-pyflakes)
+;; (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
+(require 'python)
+(add-hook 'python-mode-hook 'flycheck-mode)
+
+(el-get-bundle jedi)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+;; jinja2
+(el-get-bundle jinja2-mode)
+(add-to-list 'auto-mode-alist '("\\.j2$" . jinja2-mode))
 
 ;; elixir mode
 (el-get-bundle pkg-info)
@@ -633,9 +658,11 @@
 
 ;; apache-mode
 (el-get-bundle apache-mode)
+(global-set-key (kbd "C-x C-a") 'apache-mode)
 (add-to-list 'auto-mode-alist '("Secure$" . apache-mode))
 (add-to-list 'auto-mode-alist '("Virtual$" . apache-mode))
-
+(add-to-list 'auto-mode-alist '("Secure.j2$" . apache-mode))
+(add-to-list 'auto-mode-alist '("Virtual.j2$" . apache-mode))
 
 ;; json-mode
 (el-get-bundle json-mode)
