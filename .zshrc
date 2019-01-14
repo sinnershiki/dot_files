@@ -1,4 +1,8 @@
 ########################################
+# 読み込み
+source ~/.zshrc_ignore
+
+########################################
 # 環境変数
 export LANG=ja_JP.UTF-8
 export LESSCHARSET=utf-8
@@ -147,39 +151,57 @@ add-zsh-hook precmd rename_tmux_window
 
 ########################################
 # zsh plugin
+## autosaggestions
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+## enhancd
+source ~/.zsh/enhancd/init.sh
+ENHANCD_FILTER=peco
+
+## cd-gitroot
+fpath=(~/.zsh/cd-gitroot(N-/) $fpath)
+autoload -Uz cd-gitroot
+
+## zsh-completions
+fpath=(~/.zsh/zsh-completions/src $fpath)
+rm -f ~/.zcompdump; compinit
+
+## 256 color
+source ~/.zsh/zsh-256color/zsh-256color.plugin.zsh
+
 # zplug
-if [ -e ~/.zplug ]; then
-  source ~/.zplug/init.zsh
-  zplug "zplug/zplug"
-
-  # autosaggestions
-  zplug "zsh-users/zsh-autosuggestions"
-
-  # enhancd
-  zplug "b4b4r07/enhancd", use:init.sh
-  ENHANCD_FILTER=peco
-
-  # cd-gitroot
-  zplug "mollifier/cd-gitroot"
-  alias cdu='cd-gitroot'
-
-  # zsh-completions
-  zplug "zsh-users/zsh-completions"
-
-  # 256-color
-  zplug "chrissicool/zsh-256color"
-
-  # 未インストール項目をインストールする
-  if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-      echo; zplug install
-    fi
-  fi
-
-  # コマンドをリンクして、PATH に追加し、プラグインは読み込む
-  zplug load --verbose
-fi
+# if [ -e ~/.zplug ]; then
+#   source ~/.zplug/init.zsh
+#   zplug "zplug/zplug"
+#
+#   # autosaggestions
+#   zplug "zsh-users/zsh-autosuggestions"
+#
+#   # enhancd
+#   zplug "b4b4r07/enhancd", use:init.sh
+#   ENHANCD_FILTER=peco
+#
+#   # cd-gitroot
+#   zplug "mollifier/cd-gitroot"
+#   alias cdu='cd-gitroot'
+#
+#   # zsh-completions
+#   zplug "zsh-users/zsh-completions"
+#
+#   # 256-color
+#   zplug "chrissicool/zsh-256color"
+#
+#   # 未インストール項目をインストールする
+#   if ! zplug check --verbose; then
+#     printf "Install? [y/N]: "
+#     if read -q; then
+#       echo; zplug install
+#     fi
+#   fi
+#
+#   # コマンドをリンクして、PATH に追加し、プラグインは読み込む
+#   zplug load --verbose
+# fi
 
 ########################################
 # 拡張
@@ -236,14 +258,14 @@ darwin*)
     export TMUX_TMPDIR="/tmp"
 
     # tex
-    export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
+    # export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
 
     # emacs
     alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
     alias emacsnw='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 
     # sonar-scanner
-    alias sonar-scanner='/Users/sugano-kosuke/.sonar-scanner-3.0.3.778-macosx/bin/sonar-scanner'
+    # alias sonar-scanner='/Users/sugano-kosuke/.sonar-scanner-3.0.3.778-macosx/bin/sonar-scanner'
 
     # MySQL Path Setting
     export PATH="$PATH:/usr/local/mysql/bin"
@@ -266,6 +288,10 @@ darwin*)
             echo 'No Finder window found' >&2
         fi
     }
+
+    # inetutils
+    export PATH="/usr/local/opt/inetutils/libexec/gnubin:$PATH"
+    export MANPATH="/usr/local/opt/inetutils/libexec/gnuman:$MANPATH"
 
     ### Added by the Heroku Toolbelt
     export PATH="/usr/local/heroku/bin:$PATH"
@@ -348,10 +374,7 @@ function envs_update(){
 # ETC
 #cd .. bindkey
 function cd_up() {
-  # やりたい処理
   \cd ..
-  # キー実行時のプロンプトの内容は $BUFFER で取れる
-  #zle .reset-prompt  # プロンプトを再描画
   zle .accept-line
 }
 zle -N cd_up
@@ -363,5 +386,12 @@ if type hub >/dev/null 2>&1; then
 fi
 
 # ghq + peco + hub alias
-alias gcd='cd $(ghq root)/$(ghq list | peco)'
+function cd_repositories() {
+  \cd $(ghq root)/$(ghq list | peco)
+  #zle .reset-prompt  # プロンプトを再描画
+  zle .accept-line
+}
+zle -N cd_repositories
+bindkey '^i' cd_repositories
+alias gcd='cd_repositories'
 alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
