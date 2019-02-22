@@ -149,89 +149,6 @@ function rename_tmux_window() {
 }
 add-zsh-hook precmd rename_tmux_window
 
-########################################
-# zsh plugin
-## autosaggestions
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-## enhancd
-source ~/.zsh/enhancd/init.sh
-ENHANCD_FILTER=peco
-
-## cd-gitroot
-fpath=(~/.zsh/cd-gitroot(N-/) $fpath)
-autoload -Uz cd-gitroot
-
-## zsh-completions
-fpath=(~/.zsh/zsh-completions/src $fpath)
-rm -f ~/.zcompdump; compinit
-
-## 256 color
-source ~/.zsh/zsh-256color/zsh-256color.plugin.zsh
-
-# zplug
-# if [ -e ~/.zplug ]; then
-#   source ~/.zplug/init.zsh
-#   zplug "zplug/zplug"
-#
-#   # autosaggestions
-#   zplug "zsh-users/zsh-autosuggestions"
-#
-#   # enhancd
-#   zplug "b4b4r07/enhancd", use:init.sh
-#   ENHANCD_FILTER=peco
-#
-#   # cd-gitroot
-#   zplug "mollifier/cd-gitroot"
-#   alias cdu='cd-gitroot'
-#
-#   # zsh-completions
-#   zplug "zsh-users/zsh-completions"
-#
-#   # 256-color
-#   zplug "chrissicool/zsh-256color"
-#
-#   # 未インストール項目をインストールする
-#   if ! zplug check --verbose; then
-#     printf "Install? [y/N]: "
-#     if read -q; then
-#       echo; zplug install
-#     fi
-#   fi
-#
-#   # コマンドをリンクして、PATH に追加し、プラグインは読み込む
-#   zplug load --verbose
-# fi
-
-########################################
-# 拡張
-# peco
-if type peco >/dev/null 2>&1; then
-  alias -g P='| peco'
-  function peco-select-history() {
-      local tac
-      if which tac > /dev/null; then
-        tac="tac"
-      else
-        tac="tail -r"
-      fi
-      BUFFER=$(\history -n 1 | \
-                 eval $tac | \
-                 # ソート
-                 #uniq -c | sort -k1nr | \
-                 # 先頭の空白と数字を削除
-                 #sed -e 's/^[ ]*//g' | cut -d ' ' -f 2- | \
-                 awk '!a[$0]++' | \
-                 peco --query "$LBUFFER")
-      CURSOR=$#BUFFER
-      zle clear-screen
-  }
-  zle -N peco-select-history
-  bindkey '^r' peco-select-history
-
-  # 開始と終了を記録
-  setopt EXTENDED_HISTORY
-fi
 
 ########################################
 # OS 別の設定
@@ -298,6 +215,72 @@ darwin*)
 
     # added by travis gem
     [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
+    ########################################
+    # zsh plugin
+    ## autosaggestions
+    source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+    ## enhancd
+    source ~/.zsh/enhancd/init.sh
+    ENHANCD_FILTER=peco
+
+    ## cd-gitroot
+    fpath=(~/.zsh/cd-gitroot(N-/) $fpath)
+    autoload -Uz cd-gitroot
+
+    ## zsh-completions
+    fpath=(~/.zsh/zsh-completions/src $fpath)
+    rm -f ~/.zcompdump; compinit
+
+    ## 256 color
+    source ~/.zsh/zsh-256color/zsh-256color.plugin.zsh
+
+    ########################################
+    # 拡張
+    # peco
+    if type peco >/dev/null 2>&1; then
+      alias -g P='| peco'
+      function peco-select-history() {
+        local tac
+        if which tac > /dev/null; then
+          tac="tac"
+        else
+          tac="tail -r"
+        fi
+        BUFFER=$(\history -n 1 | \
+                   eval $tac | \
+                   # ソート
+                   #uniq -c | sort -k1nr | \
+                     # 先頭の空白と数字を削除
+                   #sed -e 's/^[ ]*//g' | cut -d ' ' -f 2- | \
+                     awk '!a[$0]++' | \
+                     peco --query "$LBUFFER")
+        CURSOR=$#BUFFER
+        zle clear-screen
+      }
+      zle -N peco-select-history
+      bindkey '^r' peco-select-history
+
+      # 開始と終了を記録
+      setopt EXTENDED_HISTORY
+    fi
+
+    # hub
+    if type hub >/dev/null 2>&1; then
+      function git(){hub "$@"}
+    fi
+
+    # ghq + peco + hub alias
+    function cd_repositories() {
+      \cd $(ghq root)/$(ghq list | peco)
+      #zle .reset-prompt  # プロンプトを再描画
+      zle .accept-line
+    }
+    zle -N cd_repositories
+    bindkey '^w' cd_repositories
+    alias gcd='cd $(ghq root)/$(ghq list | peco)'
+    alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
     ;;
 ########################################
@@ -379,19 +362,3 @@ function cd_up() {
 }
 zle -N cd_up
 bindkey '^u' cd_up
-
-# hub
-if type hub >/dev/null 2>&1; then
-  function git(){hub "$@"}
-fi
-
-# ghq + peco + hub alias
-function cd_repositories() {
-  \cd $(ghq root)/$(ghq list | peco)
-  #zle .reset-prompt  # プロンプトを再描画
-  zle .accept-line
-}
-zle -N cd_repositories
-bindkey '^w' cd_repositories
-alias gcd='cd $(ghq root)/$(ghq list | peco)'
-alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
