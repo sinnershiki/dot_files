@@ -392,6 +392,6 @@ function cd_repositories() {
   zle .accept-line
 }
 zle -N cd_repositories
-bindkey '^i' cd_repositories
-alias gcd='cd_repositories'
+bindkey '^w' cd_repositories
+alias gcd='cd $(ghq root)/$(ghq list | peco)'
 alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
