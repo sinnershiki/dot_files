@@ -282,6 +282,9 @@ darwin*)
     alias gcd='cd $(ghq root)/$(ghq list | peco)'
     alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
+    # gloud
+    source "/Users/sugano-kosuke/Downloads/google-cloud-sdk/completion.zsh.inc"
+    source "/Users/sugano-kosuke/Downloads/google-cloud-sdk/path.zsh.inc"
     ;;
 ########################################
 #Linux用の設定

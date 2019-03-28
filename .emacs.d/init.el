@@ -502,7 +502,7 @@
 (add-hook 'go-mode-hook 'company-mode)
 (add-hook 'go-mode-hook 'flycheck-mode)
 (add-hook 'go-mode-hook (lambda()
-                          (add-hook 'before-save-hook' 'gofmt-before-save)
+                          (add-hook 'before-save-hook 'gofmt-before-save)
                           (local-set-key (kbd "M-.") 'godef-jump)
                           (set (make-local-variable 'company-backends) '(company-go))
                           (company-mode)
@@ -643,6 +643,10 @@
 
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------
+;; dockerfile-mode
+(el-get-bundle dockerfile-mode)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+
 ;; yaml-mode
 (el-get-bundle yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -658,7 +662,7 @@
 
 ;; apache-mode
 (el-get-bundle apache-mode)
-(global-set-key (kbd "C-x C-a") 'apache-mode)
+;;(global-set-key (kbd "C-x C-a") 'apache-mode)
 (add-to-list 'auto-mode-alist '("Secure$" . apache-mode))
 (add-to-list 'auto-mode-alist '("Virtual$" . apache-mode))
 (add-to-list 'auto-mode-alist '("Secure.j2$" . apache-mode))
@@ -679,3 +683,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'downcase-region 'disabled nil)
