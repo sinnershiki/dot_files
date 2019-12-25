@@ -111,6 +111,7 @@
 (cua-mode t)
 (setq cua-enable-cua-keys nil) ; デフォルトキーバインドを無効化
 (define-key global-map (kbd "C-x SPC") 'cua-set-rectangle-mark)
+(define-key global-map (kbd "C-RET") 'cua-set-rectangle-mark)
 
 ;; ediff
 (global-set-key (kbd "C-c d")  'ediff-buffers)
@@ -123,6 +124,13 @@
 
 ;; diredでcpとかmvとかできる
 (setq dired-dwim-target t)
+
+;; clipboard utf-8
+(set-clipboard-coding-system 'utf-8)
+
+;; ruby-modeでjp文字使うため
+(setenv "LC_ALL" "ja_JP.UTF-8")
+(setenv "LANG" "ja_JP.UTF-8")
 
 ;;----------------------------------------------------
 ;;
@@ -176,8 +184,11 @@
 ;; 対応する括弧をハイライト
 (show-paren-mode t)
 (setq show-paren-style 'expression)
-(set-face-background 'show-paren-match-face "gray15")
-(set-face-foreground 'show-paren-match-face "white")
+;(set-face-background 'show-paren-match-face "gray15")
+;(set-face-foreground 'show-paren-match-face "white")
+(set-face-attribute 'show-paren-match nil
+                    :foreground "white"
+                    :background "gray15")
 
 ;; 矢印キーで画面移動
 (global-set-key (kbd "C-c <left>")  'windmove-left)
@@ -195,7 +206,32 @@
 ;; 便利系
 ;;---------------------------------------------------
 ;; pbcopy
-(el-get-bundle pbcopy)
+;;(el-get-bundle pbcopy)
+;; (defun copy-from-osx ()
+;;  (shell-command-to-string "Pbpaste"))
+;; (when darwin-p
+;;   (progn
+;;     (defun copy-from-osx ()
+;;       (shell-command-to-string "reattach-to-user-namespace pbpaste"))
+;;     (defun paste-to-osx (text &optional push)
+;;       (let ((process-connection-type nil))
+;;         (let ((proc (start-process "pbcopy" "*Messages*" "reattach-to-user-namespace" "pbcopy")))
+;;           (process-send-string proc text)
+;;           (process-send-eof proc))))
+;;     (setq interprogram-cut-function 'paste-to-osx)
+;;     (setq interprogram-paste-function 'copy-from-osx)
+;;     )
+;;   (message "This platform is not mac")
+;; )
+
+;; (defun paste-to-osx (text &optional push)
+;;  (let ((process-connection-type nil))
+;;      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+;;        (process-send-string proc text)
+;;        (process-send-eof proc))))
+
+;; (setq interprogram-cut-function 'paste-to-osx)
+;; (setq interprogram-paste-function 'copy-from-osx)
 
 ;; sequential-command
 (el-get-bundle sequential-command)
@@ -247,7 +283,7 @@
 (el-get-bundle anzu)
 (global-anzu-mode +1)
 (global-set-key (kbd "C-x q") 'anzu-query-replace)
-(global-set-key (kbd "C-x C-q") 'anzu-query-replace)
+(global-set-key (kbd "C-x C-q") 'anzu-query-replace-regexp)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -258,7 +294,7 @@
  '(anzu-search-threshold 1000)
  '(package-selected-packages
    (quote
-    (flymake-python-pyflakes apples-mode company-go php-completion groovy-mode latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
+    (vue-mode flymake-python-pyflakes apples-mode company-go groovy-mode latex-math-preview memoize malabar-mode sequential-command nil pkg-info let-alist git-commit ess-R-data-view csv-mode css-mode)))
  '(safe-local-variable-values
    (quote
     ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
@@ -319,9 +355,11 @@
 ;; (setq twittering-use-master-password t)
 
 ;; tramp
-(el-get-bundle tramp)
-(add-to-list 'backup-directory-alist
-             (cons tramp-file-name-regexp nil))
+;;(el-get-bundle tramp)
+;;(add-to-list 'backup-directory-alist
+;;             (cons tramp-file-name-regexp nil))
+(setq tramp-default-method "ssh")
+
 (el-get-bundle docker-tramp)
 (require 'docker-tramp-compat)
 (set-variable 'docker-tramp-use-names t)
@@ -359,6 +397,8 @@
 ;; editorconfig
 (el-get-bundle editorconfig)
 (editorconfig-mode 1)
+(setq editorconfig-get-properties-function
+      'editorconfig-core-get-properties-hash)
 
 ;; quickrun
 (el-get-bundle quickrun)
@@ -540,7 +580,10 @@
 (el-get-bundle js2-mode)
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(setq-default c-basic-offset 2)
+(add-hook 'js2-mode-hook
+          (lambda ()
+            (make-local-variable 'js-indent-level)
+            (setq js-indent-level 2)))
 
 ;; css-mode
 ;;(el-get-bundle css-mode)
@@ -563,9 +606,9 @@
 (require 'python)
 (add-hook 'python-mode-hook 'flycheck-mode)
 
-(el-get-bundle jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;; (el-get-bundle jedi)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:complete-on-dot t)
 
 ;; jinja2
 (el-get-bundle jinja2-mode)
@@ -584,29 +627,6 @@
         sh-indent-for-case-alt '+))
 
 (add-hook 'sh-mode-hook 'init-sh-mode)
-
-;; php-mode
-(el-get-bundle php-mode)
-(el-get-bundle web-mode)
-
-;; web-modeの設定
-(add-hook 'web-mode-hook 'web-mode-hook)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[gj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(setq web-mode-engines-alist
-      '(("php"    . "\\.phtml\\'")
-        ("blade"  . "\\.blade\\.")))
-(defun web-mode-hook ()
-  (setq web-mode-markup-indent-offset 4)
-  (setq web-mode-css-indent-offset 4)
-  (setq web-mode-code-indent-offset 4))
-
 
 ;; markdown-mode
 (el-get-bundle markdown-mode)
@@ -641,6 +661,13 @@
 ;; apple script
 (el-get-bundle apples-mode)
 
+;; lua
+(el-get-bundle lua-mode)
+
+;; vue
+(el-get-bundle vue-mode)
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+
 ;; ファイル系（csvや設定ファイル等）
 ;;---------------------------------------------------
 ;; dockerfile-mode
@@ -666,7 +693,7 @@
 (add-to-list 'auto-mode-alist '("Secure$" . apache-mode))
 (add-to-list 'auto-mode-alist '("Virtual$" . apache-mode))
 (add-to-list 'auto-mode-alist '("Secure.j2$" . apache-mode))
-(add-to-list 'auto-mode-alist '("Virtual.j2$" . apache-mode))
+(add-to-list 'auto-mode-alist '("Virtual.j2$" . Apache-mode))
 
 ;; json-mode
 (el-get-bundle json-mode)
@@ -684,3 +711,9 @@
  ;; If there is more than one, they won't work right.
  )
 (put 'downcase-region 'disabled nil)
+
+;; terraform-mode
+(el-get-bundle terraform-mode)
+
+;; Dockerfile
+(el-get-bundle dockerfile-mode)

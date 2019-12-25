@@ -226,8 +226,9 @@ darwin*)
     ENHANCD_FILTER=peco
 
     ## cd-gitroot
-    fpath=(~/.zsh/cd-gitroot(N-/) $fpath)
+    fpath=(~/.zsh/cd-gitroot $fpath)
     autoload -Uz cd-gitroot
+    alias cdu='cd-gitroot'
 
     ## zsh-completions
     fpath=(~/.zsh/zsh-completions/src $fpath)
@@ -365,3 +366,10 @@ function cd_up() {
 }
 zle -N cd_up
 bindkey '^u' cd_up
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc'; fi
