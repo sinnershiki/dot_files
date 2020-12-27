@@ -284,8 +284,11 @@ darwin*)
     alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
     # gloud
-    source "/Users/sugano-kosuke/Downloads/google-cloud-sdk/completion.zsh.inc"
-    source "/Users/sugano-kosuke/Downloads/google-cloud-sdk/path.zsh.inc"
+    # The next line updates PATH for the Google Cloud SDK.
+    if [ -f '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc'; fi
+    # The next line enables shell command completion for gcloud.
+    if [ -f '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc'; fi
+
     ;;
 ########################################
 #Linux用の設定
@@ -335,6 +338,11 @@ if [ -e ~/.pyenv/plugins/pyenv-virtualenv ]; then
   eval "$(pyenv virtualenv-init -)"
 fi
 
+# poetry
+export PATH="$HOME/.poetry/bin:$PATH"
+fpath=(~/.zsh/.zfunc/_poetry $fpath)
+rm -f ~/.zcompdump; compinit
+
 # php-nabe
 export PATH=$HOME/.php-nabe/bin:$PATH
 
@@ -367,9 +375,5 @@ function cd_up() {
 zle -N cd_up
 bindkey '^u' cd_up
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+export PATH=$HOME/.local/bin:$PATH

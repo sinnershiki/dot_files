@@ -156,7 +156,7 @@
 (when darwin-p
   (set-face-attribute 'default nil
                       :family "Ricty"
-                      :height 180))
+                      :height 150))
 
 ;;---------------------------------------------------
 ;;
