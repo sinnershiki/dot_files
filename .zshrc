@@ -320,6 +320,12 @@ export PATH="$PATH:/usr/local/opt/go/libexec/bin"
 export GOPATH="$HOME/.go"
 export PATH="$PATH:$GOPATH/bin"
 
+# anyenv
+export PATH="$HOME/.anyenv/bin:$PATH"
+if [ -e ~/.anyenv ]; then
+  eval "$(anyenv init -)"
+fi
+
 # ruby:rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 if [ -e ~/.rbenv ]; then
@@ -381,6 +387,14 @@ function cd_up() {
 }
 zle -N cd_up
 bindkey '^u' cd_up
+
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 export PATH=$HOME/.local/bin:$PATH
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc'; fi
+
