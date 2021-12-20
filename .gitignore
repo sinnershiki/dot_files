@@ -6,3 +6,4 @@
 !/.emacs.d/conf
 /.byobu/*
 !/.byobu/.tmux.conf
+.gitconfig
