@@ -124,7 +124,6 @@ alias cp='cp -i'
 alias mv='mv -i'
 
 alias g='git'
-alias e='emacs'
 alias grep='grep --color'
 
 alias pbcopy="nkf -w | __CF_USER_TEXT_ENCODING=0x$(printf %x $(id -u)):0x08000100:14 pbcopy"
@@ -176,10 +175,6 @@ darwin*)
 
     # tex
     # export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
-
-    # emacs
-    alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
-    alias emacsnw='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 
     # sonar-scanner
     # alias sonar-scanner='/Users/sugano-kosuke/.sonar-scanner-3.0.3.778-macosx/bin/sonar-scanner'
