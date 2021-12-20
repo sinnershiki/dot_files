@@ -7,6 +7,9 @@ source ~/.zshrc_ignore
 export LANG=ja_JP.UTF-8
 export LESSCHARSET=utf-8
 
+# zshではマッチしないglob表現を含む場合no match error をprintしてコマンドをrunしなくなる。
+setopt +o nomatch
+
 # 色を使用出来るようにする
 autoload -Uz colors
 colors
