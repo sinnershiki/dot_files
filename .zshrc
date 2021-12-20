@@ -63,7 +63,6 @@ precmd () {
     LANG=en_US.UTF-8 vcs_info
     [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
 }
-RPROMPT="%1(v|%F{green}%1v%f|)"
 
 ########################################
 # オプション
@@ -151,6 +150,18 @@ function rename_tmux_window() {
 }
 add-zsh-hook precmd rename_tmux_window
 
+########################################
+# k8s
+alias k='kubectl'
+source <(kubectl completion zsh)
+# kubec-ps1 : brew install kube-ps1
+source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+
+########################################
+# プロンプト
+PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%} %~
+%# "
+RPROMPT="$(kube_ps1)%1(v|%F{green}%1v%f|)"
 
 ########################################
 # OS 別の設定
@@ -160,8 +171,6 @@ darwin*)
     ########################################
     # terminalに関する設定
     # プロンプト
-    PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%} %~
-%# "
 
     export CLICOLOR=1
     export LSCOLORS=gxfxcxdxbxegedabagacad
