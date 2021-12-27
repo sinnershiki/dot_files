@@ -12,7 +12,6 @@ add-zsh-hook precmd rename_tmux_window
 
 ########################################
 # k8s
-alias k='kubectl'
 source <(kubectl completion zsh)
 # kubec-ps1 : brew install kube-ps1
 source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
