@@ -1,0 +1,10 @@
+# プロンプト
+PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%} %~
+%# "
+
+#ls 色付け
+alias ls='ls -F --color'
+
+#golang
+export GOROOT="/usr/local/go"
+export PATH="$PATH:$GOROOT/bin"

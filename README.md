@@ -1,22 +1,35 @@
 # Dot files
 
-githubで管理してみたかっただけ
+dot files管理Repo
 
-### .zshrc
+## how to setup
 
-追加拡張のリスト用意すべきかな
+初回対応
 
+```shell
+# brewで必要なやつ入れる
+brew bundle
+
+# terminal / tool系
+ln -s .zshrc ~/.zshrc
+ln -s .zsh_configs/* ~/.zsh/.
+ln -s .byobu ~/.byobu
+ln -s .peco ~/.peco
+ln -s .tmux.conf ~/.tmux.conf
+
+# git
+ln -s .gitignore_global ~/.gitignore_global
+cp -pr .gitconfig.example ~/.gitconfig
+vi .gitconfig
 ```
-zsh-autosuggestions
-```
 
+## .zsh tools
 
-### .emacs.d
+zshの拡張まわり
 
-el-getで管理している。
-
-必要なパッケージがいくつかあるので、そのあたり自動化とかしたい気もするけど、一部忘れてしまったので思い出したら入れたい。
-
-```
-git, mercurial, tex-info, autoconf, bzr
-```
+- ansible-zsh-completion
+- cd-gitroot
+- enhancd
+- zsh-256color
+- zsh-autosuggestions
+- zsh-completions
