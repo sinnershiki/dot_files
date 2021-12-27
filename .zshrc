@@ -1,8 +1,4 @@
 ########################################
-# 読み込み
-source ~/.zshrc_ignore
-
-########################################
 # 環境変数
 export LANG=ja_JP.UTF-8
 export LESSCHARSET=utf-8
@@ -138,24 +134,12 @@ alias -g L='| less'
 alias -g G='| grep'
 alias -g R="| uniq -c | sort -k1nr | sed -e 's/^[ ]*//g' "
 
-########################################
-# tmux
-autoload -Uz add-zsh-hook
-function rename_tmux_window() {
-  if [ $TERM = "screen" ]; then
-    local current_path=`pwd | sed -e s/\ /_/g`
-    local current_dir=`basename $current_path`
-    tmux rename-window $current_dir
-  fi
+function cd_up() {
+  \cd ..
+  zle .accept-line
 }
-add-zsh-hook precmd rename_tmux_window
-
-########################################
-# k8s
-alias k='kubectl'
-source <(kubectl completion zsh)
-# kubec-ps1 : brew install kube-ps1
-source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+zle -N cd_up
+bindkey '^u' cd_up
 
 ########################################
 # プロンプト
@@ -168,233 +152,29 @@ RPROMPT="$(kube_ps1)%1(v|%F{green}%1v%f|)"
 case ${OSTYPE} in
 #Mac用の設定
 darwin*)
-    ########################################
-    # terminalに関する設定
-    # プロンプト
-
-    export CLICOLOR=1
-    export LSCOLORS=gxfxcxdxbxegedabagacad
-    alias ls='ls -G -F'
-
-    #brew
-    alias brew="env PATH=${PATH/\/Users\/sugano-kosuke\/\.pyenv\/shims:/} brew"
-    export PATH="/bin:/usr/bin:/usr/local/bin:/sbin:$PATH"
-    export PATH="/usr/local/sbin:$PATH"
-    export PATH="/usr/local/bin:$PATH"
-
-    # tmux
-    export TMUX_TMPDIR="/tmp"
-
-    # tex
-    # export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
-
-    # sonar-scanner
-    # alias sonar-scanner='/Users/sugano-kosuke/.sonar-scanner-3.0.3.778-macosx/bin/sonar-scanner'
-
-    # MySQL Path Setting
-    export PATH="$PATH:/usr/local/mysql/bin"
-
-    # postgres
-    export PGDATA="/usr/local/var/postgres"
-
-    # Java classpath
-    export CLASSPATH="$CLASSPATH:/Users/sugano-kosuke/Library/jdbc/mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar"
-
-    # openssl
-    export PATH="/usr/local/opt/openssl/bin:$PATH"
-
-    # cd active finder
-    cdf() {
-        target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
-        if [ "$target" != "" ]; then
-          cd "$target"; pwd
-        else
-            echo 'No Finder window found' >&2
-        fi
-    }
-
-    # inetutils
-    export PATH="/usr/local/opt/inetutils/libexec/gnubin:$PATH"
-    export MANPATH="/usr/local/opt/inetutils/libexec/gnuman:$MANPATH"
-
-    ### Added by the Heroku Toolbelt
-    export PATH="/usr/local/heroku/bin:$PATH"
-
-    # added by travis gem
-    [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
-
-    ########################################
-    # zsh plugin
-    ## autosaggestions
-    source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-    ## enhancd
-    source ~/.zsh/enhancd/init.sh
-    ENHANCD_FILTER=peco
-
-    ## cd-gitroot
-    fpath=(~/.zsh/cd-gitroot $fpath)
-    autoload -Uz cd-gitroot
-    alias cdu='cd-gitroot'
-
-    ## zsh-completions
-    fpath=(~/.zsh/zsh-completions/src $fpath)
-    rm -f ~/.zcompdump; compinit
-
-    ## 256 color
-    source ~/.zsh/zsh-256color/zsh-256color.plugin.zsh
-
-    ########################################
-    # 拡張
-    # peco
-    if type peco >/dev/null 2>&1; then
-      alias -g P='| peco'
-      function peco-select-history() {
-        local tac
-        if which tac > /dev/null; then
-          tac="tac"
-        else
-          tac="tail -r"
-        fi
-        BUFFER=$(\history -n 1 | \
-                   eval $tac | \
-                   # ソート
-                   #uniq -c | sort -k1nr | \
-                     # 先頭の空白と数字を削除
-                   #sed -e 's/^[ ]*//g' | cut -d ' ' -f 2- | \
-                     awk '!a[$0]++' | \
-                     peco --query "$LBUFFER")
-        CURSOR=$#BUFFER
-        zle clear-screen
-      }
-      zle -N peco-select-history
-      bindkey '^r' peco-select-history
-
-      # 開始と終了を記録
-      setopt EXTENDED_HISTORY
-    fi
-
-    # hub
-    if type hub >/dev/null 2>&1; then
-      function git(){hub "$@"}
-    fi
-
-    # ghq + peco + hub alias
-    function cd_repositories() {
-      \cd $(ghq root)/$(ghq list | peco)
-      #zle .reset-prompt  # プロンプトを再描画
-      zle .accept-line
-    }
-    zle -N cd_repositories
-    bindkey '^w' cd_repositories
-    alias gcd='cd $(ghq root)/$(ghq list | peco)'
-    alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
-
-    # gloud
-    # The next line updates PATH for the Google Cloud SDK.
-    if [ -f '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc'; fi
-    # The next line enables shell command completion for gcloud.
-    if [ -f '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc'; fi
-
+    source ~/.zsh/os.zsh.mac
     ;;
 ########################################
 #Linux用の設定
 linux*)
-    # プロンプト
-    PROMPT="%{${fg[cyan]}%}[%n@%m]%{${reset_color}%} %~
-%# "
-
-    #ls 色付け
-    alias ls='ls -F --color'
-
-    #golang
-    export GOROOT="/usr/local/go"
-    export PATH="$PATH:$GOROOT/bin"
+    source ~/.zsh/os.zsh.linux
     ;;
 esac
 
 ########################################
-# 言語
-# golang
-export PATH="$PATH:/usr/local/opt/go/libexec/bin"
-export GOPATH="$HOME/.go"
-export PATH="$PATH:$GOPATH/bin"
+# 分割ファイルの読み込み
 
-# anyenv
-export PATH="$HOME/.anyenv/bin:$PATH"
-if [ -e ~/.anyenv ]; then
-  eval "$(anyenv init -)"
+# git管理しないやつ
+if [ -e ~/.zshrc_ignore ]; then
+  source ~/.zshrc_ignore
 fi
 
-# ruby:rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
-if [ -e ~/.rbenv ]; then
-  eval "$(rbenv init -)"
-fi
-
-# nodejs:nodebrew
-export PATH="$HOME/.nodebrew/current/bin:$PATH"
-if [ -f ~/.nodebrew/nodebrew ]; then
-  fpath=($HOME/.nodebrew/completions/zsh $fpath)
-fi
-#export NODE_PATH=/usr/local/lib/node_modules
-#export PATH=$PATH:$NODE_PATH
-
-# python:pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-if [ -e ~/.pyenv ]; then
-  eval "$(pyenv init -)"
-fi
-# pyenv-virtualenv
-if [ -e ~/.pyenv/plugins/pyenv-virtualenv ]; then
-  eval "$(pyenv virtualenv-init -)"
-fi
-
-# poetry
-export PATH="$HOME/.poetry/bin:$PATH"
-fpath=(~/.zsh/.zfunc/_poetry $fpath)
-rm -f ~/.zcompdump; compinit
-
-# php-nabe
-export PATH=$HOME/.php-nabe/bin:$PATH
-
-# composer
-export PATH="$HOME/.composer:$PATH"
-export PATH="$HOME/.composer/vendor/bin:$PATH"
-alias composer="composer.phar"
-
-# envs update
-function envs_update(){
-    cur=$(pwd)
-    dirs=($HOME/.rbenv $HOME/.rbenv/plugins/ruby-build $HOME/.pyenv $HOME/.pyenv/plugins/pyenv-virtualenv)
-    for dir in $dirs; do
-        if [ -e $dir ]; then
-          cd $dir
-          pwd
-          git pull origin master
-        fi
+# .zsh配下の .zsh 拡張子ファイルの読み込み
+ZSHHOME="${HOME}/.zsh"
+if [ -d $ZSHHOME -a -r $ZSHHOME -a \
+     -x $ZSHHOME ]; then
+    for i in $ZSHHOME/*; do
+        [[ ${i##*/} = *.zsh ]] &&
+            [ \( -f $i -o -h $i \) -a -r $i ] && . $i
     done
-    cd $cur
-}
-
-########################################
-# ETC
-#cd .. bindkey
-function cd_up() {
-  \cd ..
-  zle .accept-line
-}
-zle -N cd_up
-bindkey '^u' cd_up
-
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
-export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
-export PATH=$HOME/.local/bin:$PATH
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc'; fi
-
+fi
