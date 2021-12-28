@@ -30,6 +30,9 @@ select-word-style default
 zstyle ':zle:*' word-chars " /=;@:{},|"
 zstyle ':zle:*' word-style unspecified
 
+# add-zsh-hookによってprecmdの重複を防ぐ
+autoload -Uz add-zsh-hook
+
 ########################################
 # 補完
 # 補完機能を有効にする
@@ -54,11 +57,6 @@ zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' formats '(%s)-[%b]'
 zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
-precmd () {
-    psvar=()
-    LANG=en_US.UTF-8 vcs_info
-    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
-}
 
 ########################################
 # オプション
@@ -138,10 +136,22 @@ if [ -d $ZSHHOME -a -r $ZSHHOME -a \
 fi
 
 ########################################
+# precmd
+psvar_update () {
+    psvar=()
+    LANG=en_US.UTF-8 vcs_info
+    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+    psvar[2]=$KUBE_PS1_CONTEXT
+    psvar[3]=$KUBE_PS1_NAMESPACE
+}
+
+add-zsh-hook precmd psvar_update
+
+########################################
 # プロンプト
 PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%} %~
 %# "
-RPROMPT="$(kube_ps1)%1(v|%F{green}%1v%f|)"
+RPROMPT="%2(v|(k8s)-[%F{red}%2v%f:%F{cyan}%3v%f]|)%1(v| %F{green}%1v%f|)"
 
 ########################################
 # OS 別の設定
