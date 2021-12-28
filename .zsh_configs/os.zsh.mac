@@ -15,21 +15,6 @@ export PATH="/usr/local/bin:$PATH"
 # tmux
 export TMUX_TMPDIR="/tmp"
 
-# tex
-# export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
-
-# sonar-scanner
-# alias sonar-scanner='/Users/sugano-kosuke/.sonar-scanner-3.0.3.778-macosx/bin/sonar-scanner'
-
-# MySQL Path Setting
-export PATH="$PATH:/usr/local/mysql/bin"
-
-# postgres
-export PGDATA="/usr/local/var/postgres"
-
-# Java classpath
-export CLASSPATH="$CLASSPATH:/Users/sugano-kosuke/Library/jdbc/mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar"
-
 # openssl
 export PATH="/usr/local/opt/openssl/bin:$PATH"
 
@@ -46,12 +31,6 @@ cdf() {
 # inetutils
 export PATH="/usr/local/opt/inetutils/libexec/gnubin:$PATH"
 export MANPATH="/usr/local/opt/inetutils/libexec/gnuman:$MANPATH"
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
-# added by travis gem
-[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
 
 ########################################
 # zsh plugin

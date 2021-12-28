@@ -120,6 +120,24 @@ zle -N cd_up
 bindkey '^u' cd_up
 
 ########################################
+# 分割ファイルの読み込み
+
+# git管理しないやつ
+if [ -e ~/.zshrc_ignore ]; then
+  source ~/.zshrc_ignore
+fi
+
+# .zsh配下の .zsh 拡張子ファイルの読み込み
+ZSHHOME="${HOME}/.zsh"
+if [ -d $ZSHHOME -a -r $ZSHHOME -a \
+     -x $ZSHHOME ]; then
+    for i in $ZSHHOME/*; do
+        [[ ${i##*/} = *.zsh ]] &&
+            [ \( -f $i -o -h $i \) -a -r $i ] && . $i
+    done
+fi
+
+########################################
 # プロンプト
 PROMPT="%{${fg[red]}%}${bg[white]}%}[%n@%m]%{${reset_color}%} %~
 %# "
@@ -138,21 +156,3 @@ linux*)
     source ~/.zsh/os.zsh.linux
     ;;
 esac
-
-########################################
-# 分割ファイルの読み込み
-
-# git管理しないやつ
-if [ -e ~/.zshrc_ignore ]; then
-  source ~/.zshrc_ignore
-fi
-
-# .zsh配下の .zsh 拡張子ファイルの読み込み
-ZSHHOME="${HOME}/.zsh"
-if [ -d $ZSHHOME -a -r $ZSHHOME -a \
-     -x $ZSHHOME ]; then
-    for i in $ZSHHOME/*; do
-        [[ ${i##*/} = *.zsh ]] &&
-            [ \( -f $i -o -h $i \) -a -r $i ] && . $i
-    done
-fi
