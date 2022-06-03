@@ -21,3 +21,8 @@ alias sudo='sudo '
 alias -g L='| less'
 alias -g G='| grep'
 alias -g R="| uniq -c | sort -k1nr | sed -e 's/^[ ]*//g' "
+
+## k8s
+alias kc='kubectx | peco | xargs kubectx'
+alias kn='kubens | peco | xargs kubens'
+alias kl='kubectl get pods |  tail -n +2 | awk "{ print \$1 }" | peco | xargs kubectl logs '
