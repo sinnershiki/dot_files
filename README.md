@@ -11,16 +11,16 @@ dot files管理Repo
 brew bundle
 
 # terminal / tool系
-ln -s .zshrc ~/.zshrc
-ln -s .zsh_configs/* ~/.zsh/.
-ln -s .byobu ~/.byobu
-ln -s .peco ~/.peco
-ln -s .tmux.conf ~/.tmux.conf
+ln -s ${PWD}/.zshrc ~/.zshrc
+ln -s ${PWD}/.zsh_configs/* ~/.zsh/.
+ln -s ${PWD}/.byobu ~/.byobu
+ln -s ${PWD}/.peco ~/.peco
+ln -s ${PWD}/.tmux.conf ~/.tmux.conf
 
 # git
-ln -s .gitignore_global ~/.gitignore_global
-cp -pr .gitconfig.example ~/.gitconfig
-vi .gitconfig
+ln -s ${PWD}/.gitignore_global ~/.gitignore_global
+cp -pr ${PWD}/.gitconfig.example ~/.gitconfig
+vi ~/.gitconfig
 ```
 
 ## .zsh tools
