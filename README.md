@@ -11,25 +11,34 @@ dot files管理Repo
 brew bundle
 
 # terminal / tool系
-ln -s .zshrc ~/.zshrc
-ln -s .zsh_configs/* ~/.zsh/.
-ln -s .byobu ~/.byobu
-ln -s .peco ~/.peco
-ln -s .tmux.conf ~/.tmux.conf
+ln -s ${PWD}/.zshrc ~/.zshrc
+ln -s ${PWD}/.zsh_configs/* ~/.zsh/.
+ln -s ${PWD}/.byobu ~/.byobu
+ln -s ${PWD}/.peco ~/.peco
+ln -s ${PWD}/.tmux.conf ~/.tmux.conf
 
 # git
-ln -s .gitignore_global ~/.gitignore_global
-cp -pr .gitconfig.example ~/.gitconfig
-vi .gitconfig
+ln -s ${PWD}/.gitignore_global ~/.gitignore_global
+cp -pr ${PWD}/.gitconfig.example ~/.gitconfig
+vi ~/.gitconfig
 ```
 
 ## .zsh tools
 
 zshの拡張まわり
 
-- ansible-zsh-completion
-- cd-gitroot
-- enhancd
-- zsh-256color
-- zsh-autosuggestions
-- zsh-completions
+- [cd-gitroot](https://github.com/mollifier/cd-gitroot)
+- [enhancd](https://github.com/b4b4r07/enhancd)
+- [zsh-256color](https://github.com/chrissicool/zsh-256color)
+- [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
+- [zsh-completions](https://github.com/zsh-users/zsh-completions)
+
+install
+
+```shell
+git clone https://github.com/mollifier/cd-gitroot.git ~/.zsh/cd-gitroot
+git clone https://github.com/b4b4r07/enhancd ~/.zsh/enhancd
+git clone https://github.com/chrissicool/zsh-256color ~/.zsh/zsh-256color
+git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.zsh/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-completions.git ~/.zsh/zsh-completions
+```
