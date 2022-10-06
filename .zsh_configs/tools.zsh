@@ -1,4 +1,5 @@
 ########################################
+## tools
 # tmux
 autoload -Uz add-zsh-hook
 function rename_tmux_window() {
@@ -10,6 +11,9 @@ function rename_tmux_window() {
 }
 add-zsh-hook precmd rename_tmux_window
 
+# direnv
+eval "$(direnv hook zsh)"
+
 ########################################
 # k8s
 source <(kubectl completion zsh)
@@ -17,7 +21,7 @@ source <(kubectl completion zsh)
 source "$(brew --prefix)/opt/kube-ps1/share/kube-ps1.sh"
 
 ########################################
-# 言語
+## lang
 # golang
 export PATH="$PATH:/usr/local/opt/go/libexec/bin"
 export GOPATH="$HOME/.go"
