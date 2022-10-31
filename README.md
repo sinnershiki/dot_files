@@ -7,10 +7,21 @@ dot files管理Repo
 初回対応
 
 ```shell
+# clone dot_files
+mkdir -p ~/work/repo
+cd ~/work/repo
+git clone git@github.com:sinnershiki/dot_files.git
+cd dot_files
+
 # brewで必要なやつ入れる
 brew bundle
 
+# install ricty font
+cp -f /opt/homebrew/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+
 # terminal / tool系
+mkdir -p ~/.zsh
 ln -s ${PWD}/.zshrc ~/.zshrc
 ln -s ${PWD}/.zsh_configs/* ~/.zsh/.
 ln -s ${PWD}/.byobu ~/.byobu
