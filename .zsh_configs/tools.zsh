@@ -19,6 +19,8 @@ eval "$(direnv hook zsh)"
 source <(kubectl completion zsh)
 # kubec-ps1 : brew install kube-ps1
 source "$(brew --prefix)/opt/kube-ps1/share/kube-ps1.sh"
+# GKE
+USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
 ########################################
 ## lang
@@ -35,8 +37,9 @@ fi
 
 # ruby:rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="/opt/homebrew/bin/rbenv:$PATH"
 if [ -e ~/.rbenv ]; then
-  eval "$(rbenv init -)"
+  eval "$(rbenv init - zsh)"
 fi
 
 # nodejs:nodebrew
@@ -46,6 +49,10 @@ if [ -f ~/.nodebrew/nodebrew ]; then
 fi
 #export NODE_PATH=/usr/local/lib/node_modules
 #export PATH=$PATH:$NODE_PATH
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # python:pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -94,4 +101,3 @@ if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc' ]; then . '/Us
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc'; fi
-
