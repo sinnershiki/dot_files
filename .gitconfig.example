@@ -13,7 +13,8 @@
     st = status
     cm = commit
     cmm = commit -m
-    co = "!f () { git branch | peco | xargs git checkout; };f"
+    co = checkout
+    cop = "!f () { git branch | peco | xargs git checkout; };f"
     cob = checkout -b
     com = checkout main
     comas = checkout master
