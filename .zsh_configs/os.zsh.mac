@@ -97,7 +97,7 @@ function cd_repositories() {
 zle -N cd_repositories
 bindkey '^w' cd_repositories
 alias gcd='cd $(ghq root)/$(ghq list | peco)'
-alias gh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
+alias hubbr='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
 # gloud
 # The next line updates PATH for the Google Cloud SDK.
