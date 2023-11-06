@@ -13,14 +13,16 @@
     st = status
     cm = commit
     cmm = commit -m
-    co = checkout
+    co = "!f () { git branch | peco | xargs git checkout; };f"
     cob = checkout -b
-    com = checkout master
+    com = checkout main
+    comas = checkout master
     cod = checkout develop
     stt = status -uno
     difff = diff --word-diff
     unstage = reset HEAD
     rename = "!sh -c 'git mv $1 __tmp; git mv __tmp $2' -"
     delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; };f"
+    delete-branch = "!f () { git branch | peco | xargs git branch -D; };f"
 [ghq]
 	root = /Users/sugano-kosuke/work/repo
