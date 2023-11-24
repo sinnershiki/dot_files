@@ -21,6 +21,8 @@ source <(kubectl completion zsh)
 source "$(brew --prefix)/opt/kube-ps1/share/kube-ps1.sh"
 # GKE
 USE_GKE_GCLOUD_AUTH_PLUGIN=True
+# krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 ########################################
 ## lang
@@ -42,17 +44,11 @@ if [ -e ~/.rbenv ]; then
   eval "$(rbenv init - zsh)"
 fi
 
-# nodejs:nodebrew
-export PATH="$HOME/.nodebrew/current/bin:$PATH"
-if [ -f ~/.nodebrew/nodebrew ]; then
-  fpath=($HOME/.nodebrew/completions/zsh $fpath)
+# nodejs:nodenv
+export PATH="$HOME/.nodenv/shims:/usr/local/bin:/usr/bin:/bin:$PATH"
+if [ -e ~/.nodenv ]; then
+  eval "$(nodenv init -)"
 fi
-#export NODE_PATH=/usr/local/lib/node_modules
-#export PATH=$PATH:$NODE_PATH
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # python:pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -60,6 +56,7 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 if [ -e ~/.pyenv ]; then
   eval "$(pyenv init -)"
 fi
+
 # pyenv-virtualenv
 if [ -e ~/.pyenv/plugins/pyenv-virtualenv ]; then
   eval "$(pyenv virtualenv-init -)"
