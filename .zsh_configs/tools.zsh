@@ -14,6 +14,59 @@ add-zsh-hook precmd rename_tmux_window
 # direnv
 eval "$(direnv hook zsh)"
 
+# any connect with cli
+export PATH="$PATH:/opt/cisco/anyconnect/bin"
+vpncon() (
+  set -eu
+
+  export OP_ITEM_NAME=$1
+
+  export VPN_HOST="$(op item get "$OP_ITEM_NAME" --fields VPN.Host)"
+  export VPN_GROUP="$(op item get "$OP_ITEM_NAME" --fields VPN.Group)"
+  export VPN_USERNAME="$(op item get "$OP_ITEM_NAME" --fields username)"
+  export VPN_SECOND_USERNAME="$(op item get "$OP_ITEM_NAME" --fields "VPN.Second Username")"
+  export VPN_PASSWORD="$(op item get "$OP_ITEM_NAME" --fields password)"
+  export VPN_TOKEN="$(op item get "$OP_ITEM_NAME" --otp)"
+
+  # if already connected, force closing connection.
+  vpncls
+
+  expect -c '
+    set log_user 0
+    set timeout 5
+
+    spawn vpn connect $env(VPN_HOST)
+
+    expect "Group:"
+    send "$env(VPN_GROUP)\r"
+    expect "Username:"
+    send "$env(VPN_USERNAME)\r"
+    expect "Password:"
+    send "$env(VPN_PASSWORD)\r"
+    expect "Second Username:"
+    send "$env(VPN_SECOND_USERNAME)\r"
+    expect "Second Password:"
+    send "$env(VPN_TOKEN)\r"
+
+    interact
+  '
+
+  open '/Applications/Cisco/Cisco AnyConnect Secure Mobility Client.app'
+)
+vpncls() (
+  # if vpn gui started, force closing.
+  killall 'Cisco AnyConnect Secure Mobility Client' >/dev/null 2>&1 || :
+
+  # if vpn connected, force closing.
+  expect -c '
+    set log_user 0
+    set timeout 5
+    spawn vpn disconnect
+    expect ">> state: Disconnected"
+    interact
+  '
+)
+
 ########################################
 # k8s
 source <(kubectl completion zsh)
