@@ -15,7 +15,7 @@ add-zsh-hook precmd rename_tmux_window
 eval "$(direnv hook zsh)"
 
 # any connect with cli
-export PATH="$PATH:/opt/cisco/anyconnect/bin"
+export PATH="$PATH:/opt/cisco/secureclient/bin"
 vpncon() (
   set -eu
 
@@ -51,11 +51,11 @@ vpncon() (
     interact
   '
 
-  open '/Applications/Cisco/Cisco AnyConnect Secure Mobility Client.app'
+  open '/Applications/Cisco/Cisco Secure Client.app'
 )
 vpncls() (
   # if vpn gui started, force closing.
-  killall 'Cisco AnyConnect Secure Mobility Client' >/dev/null 2>&1 || :
+  killall 'Cisco Secure Client' >/dev/null 2>&1 || :
 
   # if vpn connected, force closing.
   expect -c '
