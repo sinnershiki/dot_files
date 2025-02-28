@@ -25,20 +25,20 @@ vpncon() (
   export VPN_GROUP="$(op item get "$OP_ITEM_NAME" --fields VPN.Group)"
   export VPN_USERNAME="$(op item get "$OP_ITEM_NAME" --fields username)"
   export VPN_SECOND_USERNAME="$(op item get "$OP_ITEM_NAME" --fields "VPN.Second Username")"
-  export VPN_PASSWORD="$(op item get "$OP_ITEM_NAME" --fields password)"
+  export VPN_PASSWORD="$(op item get "$OP_ITEM_NAME" --reveal --fields password)"
   export VPN_TOKEN="$(op item get "$OP_ITEM_NAME" --otp)"
 
   # if already connected, force closing connection.
   vpncls
 
+  #expect "Group:"
+  #send "$env(VPN_GROUP)\r"
   expect -c '
     set log_user 0
     set timeout 5
 
     spawn vpn connect $env(VPN_HOST)
 
-    expect "Group:"
-    send "$env(VPN_GROUP)\r"
     expect "Username:"
     send "$env(VPN_USERNAME)\r"
     expect "Password:"

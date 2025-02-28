@@ -107,3 +107,6 @@ eval "$(gh completion -s zsh)"
 if [ -f '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/path.zsh.inc'; fi
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc'; fi
+
+# docker
+export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
