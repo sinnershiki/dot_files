@@ -67,6 +67,14 @@ vpncls() (
   '
 )
 
+# terraform
+tf_diff_sensitive() (
+  echo "file=$1, resource=$2"
+  diff -sU5 \
+    <(terraform show -json $1 | jq -r '.resource_changes[] | select(.address == "'"$2"'") | .change.before') \
+    <(terraform show -json $1 | jq -r '.resource_changes[] | select(.address == "'"$2"'") | .change.after')
+)
+
 ########################################
 # k8s
 source <(kubectl completion zsh)
