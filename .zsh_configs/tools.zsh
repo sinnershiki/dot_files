@@ -11,6 +11,17 @@ function rename_tmux_window() {
 }
 add-zsh-hook precmd rename_tmux_window
 
+# tmuxセッションをpecoで選択してアタッチする関数
+function ta() {
+    # 選択結果を変数に格納 (awkの代わりにシンプルなcutを使っています)
+    local session=$(tmux ls 2>/dev/null | peco | cut -d: -f1)
+
+    # セッションが選択された場合のみアタッチを実行
+    if [ -n "$session" ]; then
+        tmux attach-session -t "$session"
+    fi
+}
+
 # direnv
 eval "$(direnv hook zsh)"
 
