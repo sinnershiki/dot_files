@@ -6,3 +6,5 @@
 .infracost
 .backup
 .vscode
+
+**/.claude/settings.local.json
