@@ -1,7 +1,10 @@
 layout {
     pane split_direction="vertical" {
-        // 左側(60%の幅)で自動的に claude を起動
-        pane command="claude" size="60%"
+        // 左側(60%の幅)でリポジトリをpeco選択してからclaudeを起動
+        pane size="60%" {
+            command "zsh"
+            args "-c" "cd \"$(ghq root)/$(ghq list | peco)\" && exec claude --resume"
+        }
         // 右側(40%の幅)は通常のターミナル
         pane
     }
