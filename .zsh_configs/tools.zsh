@@ -30,7 +30,8 @@ alias zn='zellij attach -c'
 # Zellijセッションをpecoで選択してアタッチする関数
 function za() {
     # awk '{print $1}' でスペース区切りの1番目（セッション名）だけを取得
-    local session=$(zellij ls 2>/dev/null | peco | awk '{print $1}')
+    # perlコマンドを挟んで見えない制御記号を完全除去
+    local session=$(zellij ls 2>/dev/null | peco | awk '{print $1}' | perl -pe 's/\x1b\[[0-9;]*[mK]//g')
 
     # セッションが選択された場合のみアタッチを実行
     if [ -n "$session" ]; then
