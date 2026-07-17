@@ -96,6 +96,25 @@ USE_GKE_GCLOUD_AUTH_PLUGIN=True
 # krew
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
+# alias
+alias k='/Users/sugano-kosuke/work/google-cloud-sdk/bin/kubectl'
+alias kc='kubectx | peco | xargs kubectx'
+alias kn='kubens | peco | xargs kubens'
+alias kl='/Users/sugano-kosuke/work/google-cloud-sdk/bin/kubectl get pods | tail -n +2 | awk "{ print \$1 }" | peco | xargs kubectl logs '
+alias ke='/Users/sugano-kosuke/work/google-cloud-sdk/bin/kubectl get pods | tail -n +2 | awk "{ print \$1 }" | peco | xargs -I POD kubectl exec POD '
+alias k9sr='k9s --readonly'
+
+########################################
+# gcloud
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc'; fi
+
+# alias
+alias gcloud_change_config='gcloud config configurations list --format="value(name)" | peco | xargs gcloud config configurations activate'
+
 ########################################
 ## lang
 # golang
@@ -164,9 +183,3 @@ function envs_update(){
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 export PATH=$HOME/.local/bin:$PATH
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugano-kosuke/work/google-cloud-sdk/completion.zsh.inc'; fi
