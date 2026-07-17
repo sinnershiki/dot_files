@@ -1,0 +1,67 @@
+// ==========================================
+// 基本設定
+// ==========================================
+
+// Claude Codeの長い出力に対応するためスクロールバックを大幅に増やす (tmuxのhistory-limit相当)
+scroll_buffer_size 50000
+
+// OSのクリップボード(pbcopy/pbpaste)を明示的に使用
+copy_clipboard "system"
+copy_command "pbcopy"
+
+// デフォルトのレイアウトファイルを指定 (拡張子の .kdl は不要)
+default_layout "claude"
+
+// Claude Codeの長い出力に対応するため...
+scroll_buffer_size 50000
+
+// ==========================================
+// キーバインド設定
+// ==========================================
+keybinds {
+    normal {
+        // Zellijのデフォルトでは Ctrl-t は「Tabモード」ですが、
+        // tmux時代のプレフィックスとして使うために上書きします
+        unbind "Ctrl t"
+        bind "Ctrl t" { SwitchToMode "Tmux"; }
+    }
+
+    // Tmuxモード (Ctrl-t を押した後の操作)
+    tmux {
+        // Ctrl-t を2回押しで、ターミナル内のアプリ(Emacs等)に Ctrl-t を送る (send-prefix相当)
+        bind "Ctrl t" { Write 20; SwitchToMode "Normal"; }
+
+        // 画面分割 (2:下分割, 3:右分割)
+        // ※ Zellijはデフォルトで現在のディレクトリを引き継ぎます
+        bind "2" { NewPane "Down"; SwitchToMode "Normal"; }
+        bind "3" { NewPane "Right"; SwitchToMode "Normal"; }
+
+        // ウィンドウ(Tab)操作
+        bind "c" { NewTab; SwitchToMode "Normal"; }
+
+        // 破棄系 (0:ペインを閉じる, Ctrl-k:タブを閉じる)
+        bind "0" { CloseFocus; SwitchToMode "Normal"; }
+        bind "Ctrl k" { CloseTab; SwitchToMode "Normal"; }
+
+        // ペインの同期 (e:オンオフ切り替え)
+        bind "e" { ToggleActiveSyncTab; SwitchToMode "Normal"; }
+
+        // 独立ウィンドウ化 (1: フローティングペインとして切り離す機能で代用)
+        bind "1" { ToggleFloatingPanes; SwitchToMode "Normal"; }
+
+        // コピーモードの開始 (Ctrl-Space)
+        bind "Ctrl Space" { SwitchToMode "Scroll"; }
+
+        // キャンセルして戻る
+        bind "Ctrl g" { SwitchToMode "Normal"; }
+    }
+
+    // スクロール / コピーモード内での操作
+    scroll {
+        // Emacs風: Alt(Option)-w でコピーして通常モードに戻る
+        bind "Alt w" { Copy; SwitchToMode "Normal"; }
+
+        // キャンセル
+        bind "Ctrl g" { SwitchToMode "Normal"; }
+    }
+}

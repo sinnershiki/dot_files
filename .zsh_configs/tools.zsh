@@ -22,6 +22,22 @@ function ta() {
     fi
 }
 
+# zellij
+# セッション名を指定してアタッチ（無ければ作成）
+# 使い方: zn <セッション名> (例: zn myproject)
+alias zn='zellij attach -c'
+
+# Zellijセッションをpecoで選択してアタッチする関数
+function za() {
+    # awk '{print $1}' でスペース区切りの1番目（セッション名）だけを取得
+    local session=$(zellij ls 2>/dev/null | peco | awk '{print $1}')
+
+    # セッションが選択された場合のみアタッチを実行
+    if [ -n "$session" ]; then
+        zellij attach "$session"
+    fi
+}
+
 # direnv
 eval "$(direnv hook zsh)"
 

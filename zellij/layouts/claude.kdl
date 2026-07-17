@@ -1,0 +1,15 @@
+layout {
+    pane split_direction="vertical" {
+        // 左側(60%の幅)で自動的に claude を起動
+        pane command="claude" size="60%"
+        // 右側(40%の幅)は通常のターミナル
+        pane
+    }
+    // 以下はZellij標準のタブ・ステータスバー
+    pane size=1 borderless=true {
+        plugin location="zellij:tab-bar"
+    }
+    pane size=2 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+}
