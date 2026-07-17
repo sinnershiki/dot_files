@@ -15,6 +15,15 @@ default_layout "claude"
 // Claude Codeの長い出力に対応するため...
 scroll_buffer_size 50000
 
+// 🖱️ マウス操作を有効に
+mouse_mode true
+
+// 🧹 ペインの枠線を消す（スッキリする）
+pane_frames false
+
+// 💾 セッションを自動保存
+session_serialization true
+
 // ==========================================
 // キーバインド設定
 // ==========================================
