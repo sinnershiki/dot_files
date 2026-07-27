@@ -1,0 +1,107 @@
+// ==========================================
+// 基本設定
+// ==========================================
+
+// Claude Codeの長い出力に対応するためスクロールバックを大幅に増やす (tmuxのhistory-limit相当)
+scroll_buffer_size 50000
+
+// OSのクリップボード(pbcopy/pbpaste)を明示的に使用
+copy_clipboard "system"
+copy_command "pbcopy"
+
+// デフォルトのレイアウトファイルを指定 (拡張子の .kdl は不要)
+default_layout "claude"
+
+// Claude Codeの長い出力に対応するため...
+scroll_buffer_size 50000
+
+// 🖱️ マウス操作を有効に
+mouse_mode true
+
+// 🧹 ペインの枠線を消す（スッキリする）
+pane_frames false
+
+// 💾 セッションを自動保存
+session_serialization true
+
+// ==========================================
+// キーバインド設定
+// ==========================================
+keybinds {
+    // ==========================================
+    // 1. Normalモードの浄化 (Emacsキーの完全解放)
+    // ==========================================
+    normal {
+        // Zellijデフォルトのモード切り替えを全て解除
+        // (Ctrl-t は unbind すると bind より後に適用されて上書きされてしまうため対象外にする)
+        unbind "Ctrl p" "Ctrl n" "Ctrl h" "Ctrl s" "Ctrl o" "Ctrl q"
+
+        // 愛用の Ctrl-t を Zellij (Tmuxモード) の入り口として設定
+        bind "Ctrl t" { SwitchToMode "Tmux"; }
+    }
+
+    // ==========================================
+    // 2. Tmuxモード (Ctrl-t を押した後の操作)
+    // ==========================================
+    tmux {
+        // Ctrl-t を2回押しで、ターミナル内のアプリ(Emacs等)に Ctrl-t を送る (20はTのASCIIコード)
+        bind "Ctrl t" { Write 20; SwitchToMode "Normal"; }
+
+        // --- 基本のペイン・タブ操作 ---
+        bind "d" { Detach; }
+        bind "2" { NewPane "Down"; SwitchToMode "Normal"; }
+        bind "3" { NewPane "Right"; SwitchToMode "Normal"; }
+        bind "c" { NewTab; SwitchToMode "Normal"; }
+        bind "0" { CloseFocus; SwitchToMode "Normal"; }
+        bind "Ctrl k" { CloseTab; SwitchToMode "Normal"; }
+        bind "1" { ToggleFloatingPanes; SwitchToMode "Normal"; }
+        bind "e" { ToggleActiveSyncTab; SwitchToMode "Normal"; }
+        bind "Ctrl Space" { SwitchToMode "Scroll"; }
+
+        // --- Zellijの各モードへのアクセス ---
+        // プレフィックス(Ctrl-t)の後に以下のキーを押して各モードに入る
+        bind "p" { SwitchToMode "Pane"; }
+        bind "r" { SwitchToMode "Resize"; }
+        bind "m" { SwitchToMode "Move"; }
+        bind "o" { SwitchToMode "Session"; }
+        bind "s" { SwitchToMode "Scroll"; }
+        bind "t" { SwitchToMode "Tab"; }
+
+        // Zellij自体の終了 (誤爆防止のため大文字のQ)
+        bind "Q" { Quit; }
+
+        // キャンセルして戻る
+        bind "Ctrl g" { SwitchToMode "Normal"; }
+    }
+
+    // ==========================================
+    // 3. 各モードでのキャンセル処理 (Ctrl-g)
+    // ==========================================
+    // "tab" モードを追加し、どのモードに迷い込んでも Ctrl-g で Normal に戻れるようにする
+    shared_among "pane" "resize" "move" "session" "scroll" "tab" {
+        bind "Ctrl g" { SwitchToMode "Normal"; }
+    }
+
+    // Lockモード解除と、ScrollモードのAlt-wコピー設定は維持
+    shared_except "locked" {
+        unbind "Ctrl g"
+        bind "Alt g" { SwitchToMode "Locked"; }
+    }
+
+    // ==========================================
+    // 4. Ctrl-b の解放 (Emacsの後方移動キーとして使うため)
+    // ==========================================
+    // デフォルトではどのモードからでも Ctrl-b で Tmuxモードに入れてしまい、
+    // Ctrl-t と入り口が競合する。Tmuxモード自身(ダブルタップでの送出用)と
+    // Lockedモードを除いた全モードから Ctrl-b の割り当てを解除し、端末側に透過させる
+    shared_except "tmux" "locked" {
+        unbind "Ctrl b"
+    }
+    locked {
+        unbind "Ctrl g"
+        bind "Alt g" { SwitchToMode "Normal"; }
+    }
+    scroll {
+        bind "Alt w" { Copy; SwitchToMode "Normal"; }
+    }
+}
