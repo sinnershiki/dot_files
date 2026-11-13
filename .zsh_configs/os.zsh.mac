@@ -110,3 +110,10 @@ if [ -f '/Users/sugano-kosuke/google-cloud-sdk/completion.zsh.inc' ]; then . '/U
 
 # docker
 export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
+
+# ChatGPT アプリ同梱の Codex CLI（別途導入した CLI を優先する）
+codex_cli_dir="/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS"
+if [[ -x "$codex_cli_dir/codex" && ":$PATH:" != *":${codex_cli_dir}:"* ]]; then
+    export PATH="$PATH:$codex_cli_dir"
+fi
+unset codex_cli_dir
